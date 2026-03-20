@@ -1,7 +1,9 @@
 package com.fsega.ai_project_manager.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -9,6 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
+@Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +22,8 @@ public class User {
     private String email;
 
     private String password;
+
+    private LocalDateTime createdAt;
 
     @ManyToMany
     @JoinTable(name = "user_project",
