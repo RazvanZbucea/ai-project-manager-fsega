@@ -18,6 +18,6 @@ public class Role {
     private Name name;
 
     @ManyToMany(mappedBy = "roles")
-    private Set<User> users = new HashSet<User>();
+    private Set<User> users = new HashSet<>();
 
 }

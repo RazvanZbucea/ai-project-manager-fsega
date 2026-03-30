@@ -23,9 +23,9 @@ public class Project {
     private LocalDateTime createdAt;
 
     @ManyToMany(mappedBy = "projects")
-    private Set<User> users =  new HashSet<User>();
+    private Set<User> users = new HashSet<>();
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Task> tasks =  new ArrayList<Task>();
+    private List<Task> tasks = new ArrayList<>();
 
 }
