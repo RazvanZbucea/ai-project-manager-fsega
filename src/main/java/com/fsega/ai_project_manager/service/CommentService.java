@@ -4,18 +4,16 @@ import com.fsega.ai_project_manager.controller.dto.CommentDTO;
 import com.fsega.ai_project_manager.model.Comment;
 import com.fsega.ai_project_manager.repository.CommentRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+@RequiredArgsConstructor
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;
-
-    public CommentService(CommentRepository commentRepository) {
-        this.commentRepository = commentRepository;
-    }
 
     @Transactional(readOnly = true)
     public CommentDTO getCommentById(Long id) {

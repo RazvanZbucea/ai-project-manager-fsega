@@ -4,18 +4,16 @@ import com.fsega.ai_project_manager.controller.dto.ProjectDTO;
 import com.fsega.ai_project_manager.model.Project;
 import com.fsega.ai_project_manager.repository.ProjectRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class ProjectService {
     private final ProjectRepository projectRepository;
-
-    public ProjectService(ProjectRepository projectRepository) {
-        this.projectRepository = projectRepository;
-    }
 
     @Transactional(readOnly = true)
     public List<ProjectDTO> getAllProjects() {
