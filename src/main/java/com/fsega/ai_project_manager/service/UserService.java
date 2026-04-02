@@ -7,6 +7,7 @@ import com.fsega.ai_project_manager.model.User;
 import com.fsega.ai_project_manager.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
     public List<UserDTO> getAllUsers() {
@@ -36,7 +38,7 @@ public class UserService {
         User user = new User();
         user.setUsername(userDTO.username());
         user.setEmail(userDTO.email());
-        user.setPassword(userDTO.password());
+        user.setPassword(passwordEncoder.encode(userDTO.password()));
         user.setFirstName(userDTO.firstName());
         user.setLastName(userDTO.lastName());
         user.setCreatedAt(java.time.LocalDateTime.now());
