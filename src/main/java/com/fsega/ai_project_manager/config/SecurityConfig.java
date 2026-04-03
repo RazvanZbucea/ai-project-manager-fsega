@@ -20,6 +20,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf.disable()) // Dezactivăm CSRF pentru API-uri REST
                 .authorizeHttpRequests((auth) -> auth
                         .anyRequest().permitAll());
         return http.build();

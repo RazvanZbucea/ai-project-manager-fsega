@@ -4,6 +4,7 @@ import com.fsega.ai_project_manager.controller.dto.UserCreateDTO;
 import com.fsega.ai_project_manager.controller.dto.UserDTO;
 import com.fsega.ai_project_manager.controller.dto.UserUpdateDTO;
 import com.fsega.ai_project_manager.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,12 +30,12 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserCreateDTO userDTO) {
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserCreateDTO userDTO) {
         return new ResponseEntity<>(userService.createUser(userDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserUpdateDTO userDTO) {
+    public ResponseEntity<UserDTO> updateUser(@Valid @PathVariable Long id, @RequestBody UserUpdateDTO userDTO) {
         return ResponseEntity.ok(userService.updateUser(id, userDTO));
     }
 
