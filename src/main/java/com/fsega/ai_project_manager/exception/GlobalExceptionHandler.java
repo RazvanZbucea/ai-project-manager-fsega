@@ -1,6 +1,7 @@
 package com.fsega.ai_project_manager.exception;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -30,5 +31,19 @@ public class GlobalExceptionHandler {
         });
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        return new ResponseEntity<>("O înregistrare cu aceste date (ex: email sau username) există deja.", HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleGenericException(Exception ex) {
+
+        System.err.println("Eroare neprevazuta interceptata: " + ex.getMessage());
+        ex.printStackTrace();
+
+        return new ResponseEntity<>("A apărut o eroare internă a serverului. Vă rugăm să încercați mai târziu.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
