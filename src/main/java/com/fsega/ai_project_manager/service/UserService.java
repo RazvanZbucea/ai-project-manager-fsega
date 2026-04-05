@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -41,7 +42,8 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(userDTO.password()));
         user.setFirstName(userDTO.firstName());
         user.setLastName(userDTO.lastName());
-        user.setCreatedAt(java.time.LocalDateTime.now());
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
 
         User savedUser = userRepository.save(user);
 
@@ -49,17 +51,16 @@ public class UserService {
     }
 
     @Transactional
-
     public UserDTO updateUser(Long id, UserUpdateDTO userDTO) {
 
-        User foundUser = userRepository.findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+        user.setEmail(userDTO.email());
+        user.setFirstName(userDTO.firstName());
+        user.setLastName(userDTO.lastName());
+        user.setUpdatedAt(LocalDateTime.now());
 
-        foundUser.setEmail(userDTO.email());
-        foundUser.setFirstName(userDTO.firstName());
-        foundUser.setLastName(userDTO.lastName());
-
-        User savedUser = userRepository.save(foundUser);
+        User savedUser = userRepository.save(user);
 
         return convertToDTO(savedUser);
     }
@@ -77,6 +78,7 @@ public class UserService {
                 user.getEmail(),
                 user.getFirstName(),
                 user.getLastName(),
-                user.getCreatedAt().toString());
+                user.getCreatedAt().toString(),
+                user.getUpdatedAt().toString());
     }
 }

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -34,11 +35,26 @@ public class ProjectService {
         Project project = new Project();
         project.setName(projectDTO.name());
         project.setDescription(projectDTO.description());
-        project.setCreatedAt(java.time.LocalDateTime.now());
+        project.setCreatedAt(LocalDateTime.now());
+        project.setUpdatedAt(LocalDateTime.now());
 
         Project savedProject = projectRepository.save(project);
 
         return convertToDTO(savedProject);
+    }
+
+    @Transactional
+    public ProjectDTO updateProject(Long id, ProjectDTO projectDTO) {
+
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Project not found with id: " + id));
+        project.setName(projectDTO.name());
+        project.setDescription(projectDTO.description());
+        project.setUpdatedAt(LocalDateTime.now());
+
+        Project updatedProject = projectRepository.save(project);
+
+        return convertToDTO(updatedProject);
     }
 
     public void deleteProjectById(Long id) {
@@ -52,6 +68,7 @@ public class ProjectService {
         return new ProjectDTO(project.getId(),
                 project.getName(),
                 project.getDescription(),
-                project.getCreatedAt().toString());
+                project.getCreatedAt().toString(),
+                project.getUpdatedAt().toString());
     }
 }

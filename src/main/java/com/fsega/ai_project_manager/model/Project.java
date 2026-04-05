@@ -1,7 +1,8 @@
 package com.fsega.ai_project_manager.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,18 +10,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Getter
+@Setter
 @Entity
-@Data
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
     private String description;
 
     private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
     @ManyToMany(mappedBy = "projects")
     private Set<User> users = new HashSet<>();

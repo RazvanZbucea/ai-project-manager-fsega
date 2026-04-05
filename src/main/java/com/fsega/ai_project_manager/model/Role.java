@@ -2,13 +2,15 @@ package com.fsega.ai_project_manager.model;
 
 import com.fsega.ai_project_manager.model.enums.Name;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Getter
+@Setter
 @Entity
-@Data
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

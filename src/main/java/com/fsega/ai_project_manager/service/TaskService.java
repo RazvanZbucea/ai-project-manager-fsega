@@ -2,11 +2,14 @@ package com.fsega.ai_project_manager.service;
 
 import com.fsega.ai_project_manager.controller.dto.TaskDTO;
 import com.fsega.ai_project_manager.model.Task;
+import com.fsega.ai_project_manager.model.enums.Status;
 import com.fsega.ai_project_manager.repository.TaskRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Service
@@ -25,9 +28,9 @@ public class TaskService {
         Task task = new Task();
         task.setTitle(taskDTO.title());
         task.setDescription(taskDTO.description());
-        task.setStatus(com.fsega.ai_project_manager.model.enums.Status.valueOf(taskDTO.status()));
-        task.setCreatedAt(java.time.LocalDateTime.now());
-        task.setUpdatedAt(java.time.LocalDateTime.now());
+        task.setStatus(Status.valueOf(taskDTO.status()));
+        task.setCreatedAt(LocalDateTime.now());
+        task.setUpdatedAt(LocalDateTime.now());
 
         Task savedTask = taskRepository.save(task);
 
