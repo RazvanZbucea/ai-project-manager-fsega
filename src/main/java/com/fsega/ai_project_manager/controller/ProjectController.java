@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/projects")
-@RequiredArgsConstructor
 public class ProjectController {
 
     private final ProjectService projectService;
@@ -21,7 +21,7 @@ public class ProjectController {
         return ResponseEntity.ok(projectService.getAllProjects());
     }
 
-    @GetMapping("{/id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ProjectDTO> getProjectById(@PathVariable Long id) {
         return ResponseEntity.ok(projectService.getProjectById(id));
     }
@@ -31,12 +31,12 @@ public class ProjectController {
         return new ResponseEntity<>(projectService.createProject(projectDTO), HttpStatus.CREATED);
     }
 
-    @PutMapping("{/id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ProjectDTO> updateProject(@PathVariable Long id, @RequestBody ProjectDTO projectDTO) {
         return ResponseEntity.ok(projectService.updateProject(id, projectDTO));
     }
 
-    @DeleteMapping("{/id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ProjectDTO> deleteProject(@PathVariable Long id) {
         projectService.deleteProjectById(id);
         return ResponseEntity.noContent().build();
