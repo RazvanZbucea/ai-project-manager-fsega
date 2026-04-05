@@ -2,7 +2,9 @@ package com.fsega.ai_project_manager.service;
 
 import com.fsega.ai_project_manager.controller.dto.ProjectDTO;
 import com.fsega.ai_project_manager.model.Project;
+import com.fsega.ai_project_manager.model.User;
 import com.fsega.ai_project_manager.repository.ProjectRepository;
+import com.fsega.ai_project_manager.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import java.util.List;
 @Service
 public class ProjectService {
     private final ProjectRepository projectRepository;
+    private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
     public List<ProjectDTO> getAllProjects() {
@@ -62,6 +65,15 @@ public class ProjectService {
             throw new EntityNotFoundException("Project not found with id: " + id);
         }
         projectRepository.deleteById(id);
+    }
+
+    public void assignUserToProject(Long projectId, Long userId){
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new EntityNotFoundException("Project not found with id: " + projectId));
+        User user =  userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+        project.getUsers().add(user);
+        projectRepository.save(project);
     }
 
     private ProjectDTO convertToDTO(Project project) {

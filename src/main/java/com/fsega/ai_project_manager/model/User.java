@@ -38,10 +38,7 @@ public class User {
 
     private LocalDateTime updatedAt;
 
-    @ManyToMany
-    @JoinTable(name = "user_project",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "project_id"))
+    @ManyToMany(mappedBy = "users")
     private Set<Project> projects = new HashSet<>();
 
     @ManyToMany

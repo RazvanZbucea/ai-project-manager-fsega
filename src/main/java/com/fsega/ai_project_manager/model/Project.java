@@ -27,7 +27,10 @@ public class Project {
 
     private LocalDateTime updatedAt;
 
-    @ManyToMany(mappedBy = "projects")
+    @ManyToMany
+    @JoinTable(name = "project_user",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> users = new HashSet<>();
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
