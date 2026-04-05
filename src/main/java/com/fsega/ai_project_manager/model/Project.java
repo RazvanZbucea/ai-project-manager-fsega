@@ -36,4 +36,11 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
 
+    public void addUser(User user) {
+        if(this.users.contains(user)) {
+            throw new IllegalStateException("Utilizatorul este deja asignat la acest proiect!");
+        }
+        this.users.add(user);
+        user.getProjects().add(this);
+    }
 }

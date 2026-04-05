@@ -41,9 +41,7 @@ public class ProjectService {
         project.setCreatedAt(LocalDateTime.now());
         project.setUpdatedAt(LocalDateTime.now());
 
-        Project savedProject = projectRepository.save(project);
-
-        return convertToDTO(savedProject);
+        return convertToDTO(project);
     }
 
     @Transactional
@@ -55,9 +53,7 @@ public class ProjectService {
         project.setDescription(projectDTO.description());
         project.setUpdatedAt(LocalDateTime.now());
 
-        Project updatedProject = projectRepository.save(project);
-
-        return convertToDTO(updatedProject);
+        return convertToDTO(project);
     }
 
     public void deleteProjectById(Long id) {
@@ -67,13 +63,13 @@ public class ProjectService {
         projectRepository.deleteById(id);
     }
 
+    @Transactional
     public void assignUserToProject(Long projectId, Long userId){
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("Project not found with id: " + projectId));
         User user =  userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
-        project.getUsers().add(user);
-        projectRepository.save(project);
+        project.addUser(user);
     }
 
     private ProjectDTO convertToDTO(Project project) {

@@ -37,13 +37,13 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ProjectDTO> deleteProject(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
         projectService.deleteProjectById(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{projectId}/users/{userId}")
-    public ResponseEntity<ProjectDTO> assignUserToProject(@PathVariable Long projectId, @PathVariable Long userId) {
+    public ResponseEntity<Void> assignUserToProject(@PathVariable Long projectId, @PathVariable Long userId) {
         projectService.assignUserToProject(projectId, userId);
         return ResponseEntity.ok().build();
     }

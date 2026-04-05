@@ -45,9 +45,7 @@ public class UserService {
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
 
-        User savedUser = userRepository.save(user);
-
-        return convertToDTO(savedUser);
+        return convertToDTO(user);
     }
 
     @Transactional
@@ -60,9 +58,7 @@ public class UserService {
         user.setLastName(userDTO.lastName());
         user.setUpdatedAt(LocalDateTime.now());
 
-        User savedUser = userRepository.save(user);
-
-        return convertToDTO(savedUser);
+        return convertToDTO(user);
     }
 
     public void deleteUserById(Long id) {

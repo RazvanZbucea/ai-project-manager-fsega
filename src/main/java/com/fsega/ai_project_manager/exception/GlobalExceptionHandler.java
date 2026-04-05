@@ -46,4 +46,9 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>("A apărut o eroare internă a serverului. Vă rugăm să încercați mai târziu.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<String> handleIllegalStateException(IllegalStateException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }
