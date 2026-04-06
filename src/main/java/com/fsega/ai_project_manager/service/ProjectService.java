@@ -41,7 +41,9 @@ public class ProjectService {
         project.setCreatedAt(LocalDateTime.now());
         project.setUpdatedAt(LocalDateTime.now());
 
-        return convertToDTO(project);
+        Project savedProject = projectRepository.save(project);
+
+        return convertToDTO(savedProject);
     }
 
     @Transactional

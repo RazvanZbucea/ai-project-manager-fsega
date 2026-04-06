@@ -45,7 +45,9 @@ public class UserService {
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
 
-        return convertToDTO(user);
+        User savedUser = userRepository.save(user);
+
+        return convertToDTO(savedUser);
     }
 
     @Transactional
