@@ -1,7 +1,9 @@
 package com.fsega.ai_project_manager.controller;
 
 import com.fsega.ai_project_manager.controller.dto.ProjectDTO;
+import com.fsega.ai_project_manager.controller.dto.TaskDTO;
 import com.fsega.ai_project_manager.service.ProjectService;
+import com.fsega.ai_project_manager.service.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,8 +16,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/projects")
 public class ProjectController {
-
     private final ProjectService projectService;
+    private final TaskService taskService;
 
     @GetMapping
     public ResponseEntity<List<ProjectDTO>> getProjects() {
@@ -47,5 +49,10 @@ public class ProjectController {
     public ResponseEntity<Void> assignUserToProject(@PathVariable Long projectId, @PathVariable Long userId) {
         projectService.assignUserToProject(projectId, userId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{projectId}/tasks")
+    public ResponseEntity<List<TaskDTO>> getTasksByProjectId(@PathVariable Long projectId) {
+        return ResponseEntity.ok(taskService.getTasksByProjectId(projectId));
     }
 }

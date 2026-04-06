@@ -100,12 +100,9 @@ public class TaskService {
 
     private void assignTaskToUser(Task task, String username) {
         if (username != null && !username.isEmpty()) {
-            User user = userRepository.findByUsername(username);
-            if (user != null) {
-                task.setAssignedTo(user);
-            } else {
-                throw new EntityNotFoundException("User not found with name: " + username);
-            }
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new EntityNotFoundException("User not found with name: " + username));
+            task.setAssignedTo(user);
         } else {
             task.setAssignedTo(null);
         }
