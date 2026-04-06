@@ -1,5 +1,7 @@
 package com.fsega.ai_project_manager.controller.dto;
 
-public record TaskCreateDTO(Long id, String title, String description, String status, String createdAt,
-                            String updatedAt, String assignedName, Long projectId) {
+import jakarta.validation.constraints.NotBlank;
+
+public record TaskCreateDTO(@NotBlank(message = "Titlul este obligatoriu") String title, String description,
+                            String status, String assignedName, Long projectId) {
 }

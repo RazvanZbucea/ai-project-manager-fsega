@@ -2,7 +2,9 @@ package com.fsega.ai_project_manager.controller;
 
 import com.fsega.ai_project_manager.controller.dto.TaskCreateDTO;
 import com.fsega.ai_project_manager.controller.dto.TaskDTO;
+import com.fsega.ai_project_manager.controller.dto.TaskUpdateDTO;
 import com.fsega.ai_project_manager.service.TaskService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,27 +18,27 @@ import java.util.List;
 public class TaskController {
     private final TaskService taskService;
 
-    @GetMapping("{/id}")
+    @GetMapping("/{id}")
     public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
         return ResponseEntity.ok(taskService.getTaskById(id));
     }
 
-    @GetMapping("projects/{/id}")
+    @GetMapping("projects/{id}")
     public ResponseEntity<List<TaskDTO>> getTasksByProjectId(@PathVariable Long id) {
         return ResponseEntity.ok(taskService.getTasksByProjectId(id));
     }
 
     @PostMapping
-    public ResponseEntity<TaskDTO> createTask(@RequestBody TaskCreateDTO taskDTO) {
+    public ResponseEntity<TaskDTO> createTask(@Valid @RequestBody TaskCreateDTO taskDTO) {
         return new ResponseEntity<>(taskService.createTask(taskDTO), HttpStatus.CREATED);
     }
 
-    @PutMapping("{/id}")
-    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO) {
+    @PutMapping("/{id}")
+    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @Valid @RequestBody TaskUpdateDTO taskDTO) {
         return ResponseEntity.ok(taskService.updateTask(id, taskDTO));
     }
 
-    @DeleteMapping("{/id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         taskService.deleteTaskById(id);
         return ResponseEntity.noContent().build();

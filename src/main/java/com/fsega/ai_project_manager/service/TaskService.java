@@ -2,6 +2,7 @@ package com.fsega.ai_project_manager.service;
 
 import com.fsega.ai_project_manager.controller.dto.TaskCreateDTO;
 import com.fsega.ai_project_manager.controller.dto.TaskDTO;
+import com.fsega.ai_project_manager.controller.dto.TaskUpdateDTO;
 import com.fsega.ai_project_manager.model.Project;
 import com.fsega.ai_project_manager.model.Task;
 import com.fsega.ai_project_manager.model.User;
@@ -52,13 +53,16 @@ public class TaskService {
                 .orElseThrow(() -> new EntityNotFoundException("Project not found with id: " + taskDTO.projectId()));
         task.setProject(project);
 
+        assignTaskToUser(task, taskDTO.assignedName());
+
         Task savedTask = taskRepository.save(task);
 
         return convertToDTO(savedTask);
     }
 
+
     @Transactional()
-    public TaskDTO updateTask(Long id, TaskDTO taskDTO) {
+    public TaskDTO updateTask(Long id, TaskUpdateDTO taskDTO) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Task not found with id: " + id));
         task.setTitle(taskDTO.title());
@@ -66,8 +70,7 @@ public class TaskService {
         task.setStatus(Status.valueOf(taskDTO.status()));
         task.setUpdatedAt(LocalDateTime.now());
 
-        User user = userRepository.findByUsername(taskDTO.assignedName());
-        task.setAssignedTo(user);
+        assignTaskToUser(task, taskDTO.assignedName());
 
         return convertToDTO(task);
     }
@@ -93,5 +96,18 @@ public class TaskService {
                 task.getUpdatedAt().toString(),
                 assigneeName
         );
+    }
+
+    private void assignTaskToUser(Task task, String username) {
+        if (username != null && !username.isEmpty()) {
+            User user = userRepository.findByUsername(username);
+            if (user != null) {
+                task.setAssignedTo(user);
+            } else {
+                throw new EntityNotFoundException("User not found with name: " + username);
+            }
+        } else {
+            task.setAssignedTo(null);
+        }
     }
 }
