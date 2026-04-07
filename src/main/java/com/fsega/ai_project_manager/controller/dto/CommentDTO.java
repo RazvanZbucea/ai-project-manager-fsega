@@ -1,4 +1,6 @@
 package com.fsega.ai_project_manager.controller.dto;
 
-public record CommentDTO(Long id, String text, String createdAt, String updatedAt, String author) {
+import jakarta.validation.constraints.NotBlank;
+
+public record CommentDTO(Long id, @NotBlank String text, String createdAt, String updatedAt, String author) {
 }

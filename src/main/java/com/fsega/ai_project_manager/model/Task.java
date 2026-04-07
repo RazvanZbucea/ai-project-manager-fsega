@@ -37,6 +37,6 @@ public class Task {
     private User assignedTo;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comment =  new ArrayList<>();
+    private List<Comment> comments =  new ArrayList<>();
 
 }

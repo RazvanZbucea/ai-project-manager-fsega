@@ -34,6 +34,10 @@ public class TaskService {
 
     @Transactional(readOnly = true)
     public List<TaskDTO> getTasksByProjectId(Long projectId) {
+        if (!projectRepository.existsById(projectId)) {
+            throw new EntityNotFoundException("Project not found with id: " + projectId);
+        }
+
         return taskRepository.findByProjectId(projectId)
                 .stream()
                 .map(this::convertToDTO)
