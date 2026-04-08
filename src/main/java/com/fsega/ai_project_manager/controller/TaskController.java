@@ -46,4 +46,9 @@ public class TaskController {
     public ResponseEntity<List<CommentDTO>> getCommentsByTaskId(@PathVariable Long taskId) {
         return ResponseEntity.ok(commentService.getCommentsByTaskId(taskId));
     }
+
+    @PostMapping("/{taskId}/comments")
+    public ResponseEntity<CommentDTO> createComment(@PathVariable Long taskId, @RequestBody CommentDTO commentDTO) {
+        return new ResponseEntity<>(commentService.createComment(taskId, commentDTO), HttpStatus.CREATED);
+    }
 }

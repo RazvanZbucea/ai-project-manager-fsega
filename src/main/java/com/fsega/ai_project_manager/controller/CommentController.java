@@ -5,7 +5,6 @@ import com.fsega.ai_project_manager.controller.dto.CommentUpdateDTO;
 import com.fsega.ai_project_manager.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,11 +17,6 @@ public class CommentController {
     @GetMapping("/{id}")
     public ResponseEntity<CommentDTO> getCommentById(@PathVariable Long id) {
         return ResponseEntity.ok(commentService.getCommentById(id));
-    }
-
-    @PostMapping("/tasks/{taskId}")
-    public ResponseEntity<CommentDTO> createComment(@PathVariable Long taskId, @RequestBody CommentDTO commentDTO) {
-        return new ResponseEntity<>(commentService.createComment(taskId, commentDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
