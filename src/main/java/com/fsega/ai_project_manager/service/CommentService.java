@@ -43,7 +43,9 @@ public class CommentService {
 
     @Transactional
     public CommentDTO createComment(Long taskId, CommentDTO commentDTO) {
-        Task task = taskRepository.getReferenceById(taskId);
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new EntityNotFoundException("Task not found with id: " + taskId));
+
         Comment comment = new Comment();
         comment.setText(commentDTO.text());
         comment.setTask(task);
@@ -75,7 +77,7 @@ public class CommentService {
         return new CommentDTO(comment.getId(),
                 comment.getText(),
                 comment.getCreatedAt().toString(),
-                comment.getUpdatedAt() != null ? comment.getUpdatedAt().toString() : null,
+                comment.getUpdatedAt().toString(),
                 comment.getAuthor().getUsername());
     }
 
