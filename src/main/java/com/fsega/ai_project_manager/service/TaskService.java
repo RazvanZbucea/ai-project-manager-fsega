@@ -50,8 +50,6 @@ public class TaskService {
         task.setTitle(taskDTO.title());
         task.setDescription(taskDTO.description());
         task.setStatus(Status.valueOf(taskDTO.status()));
-        task.setCreatedAt(LocalDateTime.now());
-        task.setUpdatedAt(LocalDateTime.now());
 
         Project project = projectRepository.findById(taskDTO.projectId())
                 .orElseThrow(() -> new EntityNotFoundException("Project not found with id: " + taskDTO.projectId()));
@@ -72,7 +70,6 @@ public class TaskService {
         task.setTitle(taskDTO.title());
         task.setDescription(taskDTO.description());
         task.setStatus(Status.valueOf(taskDTO.status()));
-        task.setUpdatedAt(LocalDateTime.now());
 
         assignTaskToUser(task, taskDTO.assignedName());
 

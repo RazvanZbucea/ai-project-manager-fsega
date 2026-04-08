@@ -13,9 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -45,15 +43,10 @@ public class CommentService {
 
     @Transactional
     public CommentDTO createComment(Long taskId, CommentDTO commentDTO) {
-        Optional<Task> task = taskRepository.findById(taskId);
-        if (task.isEmpty()) {
-            throw new EntityNotFoundException("Task not found with id: " + taskId);
-        }
+        Task task = taskRepository.getReferenceById(taskId);
         Comment comment = new Comment();
         comment.setText(commentDTO.text());
-        comment.setCreatedAt(LocalDateTime.now());
-        comment.setUpdatedAt(LocalDateTime.now());
-        comment.setTask(task.get());
+        comment.setTask(task);
 
         assignCommentToUser(comment, commentDTO.author());
 
@@ -66,9 +59,7 @@ public class CommentService {
     public CommentDTO updateComment(Long id, CommentUpdateDTO commentDTO) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Comment not found with id: " + id));
-
         comment.setText(commentDTO.text());
-        comment.setUpdatedAt(LocalDateTime.now());
 
         return convertToDTO(comment);
     }

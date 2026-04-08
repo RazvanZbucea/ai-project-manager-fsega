@@ -38,8 +38,6 @@ public class ProjectService {
         Project project = new Project();
         project.setName(projectDTO.name());
         project.setDescription(projectDTO.description());
-        project.setCreatedAt(LocalDateTime.now());
-        project.setUpdatedAt(LocalDateTime.now());
 
         Project savedProject = projectRepository.save(project);
 
@@ -53,7 +51,6 @@ public class ProjectService {
                 .orElseThrow(() -> new EntityNotFoundException("Project not found with id: " + id));
         project.setName(projectDTO.name());
         project.setDescription(projectDTO.description());
-        project.setUpdatedAt(LocalDateTime.now());
 
         return convertToDTO(project);
     }

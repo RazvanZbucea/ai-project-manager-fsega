@@ -42,8 +42,6 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(userDTO.password()));
         user.setFirstName(userDTO.firstName());
         user.setLastName(userDTO.lastName());
-        user.setCreatedAt(LocalDateTime.now());
-        user.setUpdatedAt(LocalDateTime.now());
 
         User savedUser = userRepository.save(user);
 
@@ -58,7 +56,6 @@ public class UserService {
         user.setEmail(userDTO.email());
         user.setFirstName(userDTO.firstName());
         user.setLastName(userDTO.lastName());
-        user.setUpdatedAt(LocalDateTime.now());
 
         return convertToDTO(user);
     }

@@ -3,6 +3,8 @@ package com.fsega.ai_project_manager.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -34,8 +36,10 @@ public class User {
     @Column(nullable = false)
     private String lastName;
 
+    @CreatedDate
     private LocalDateTime createdAt;
 
+    @LastModifiedDate
     private LocalDateTime updatedAt;
 
     @ManyToMany(mappedBy = "users")

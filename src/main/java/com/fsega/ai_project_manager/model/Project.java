@@ -3,6 +3,8 @@ package com.fsega.ai_project_manager.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,8 +25,10 @@ public class Project {
 
     private String description;
 
+    @CreatedDate
     private LocalDateTime createdAt;
 
+    @LastModifiedDate
     private LocalDateTime updatedAt;
 
     @ManyToMany
@@ -37,7 +41,7 @@ public class Project {
     private List<Task> tasks = new ArrayList<>();
 
     public void addUser(User user) {
-        if(this.users.contains(user)) {
+        if (this.users.contains(user)) {
             throw new IllegalStateException("Utilizatorul este deja asignat la acest proiect!");
         }
         this.users.add(user);
