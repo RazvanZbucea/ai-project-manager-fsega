@@ -75,11 +75,15 @@ public class CommentService {
     }
 
     private CommentDTO convertToDTO(Comment comment) {
+        String authorName = comment.getAuthor().getUsername();
+        if (comment.getAuthor().isDeleted()) {
+            authorName += " (Dezactivat)";
+        }
         return new CommentDTO(comment.getId(),
                 comment.getText(),
                 comment.getCreatedAt().toString(),
                 comment.getUpdatedAt().toString(),
-                comment.getAuthor().getUsername());
+                authorName);
     }
 
     private void assignCommentToUser(Comment comment, String username) {

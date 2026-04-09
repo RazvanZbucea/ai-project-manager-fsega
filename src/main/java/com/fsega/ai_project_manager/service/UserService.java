@@ -22,7 +22,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public List<UserDTO> getAllUsers() {
-        return userRepository.findAll().stream()
+        return userRepository.findByIsDeletedFalse().stream()
                 .map(this::convertToDTO)
                 .toList();
     }

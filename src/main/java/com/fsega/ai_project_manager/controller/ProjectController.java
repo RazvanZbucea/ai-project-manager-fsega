@@ -1,6 +1,7 @@
 package com.fsega.ai_project_manager.controller;
 
 import com.fsega.ai_project_manager.controller.dto.ProjectDTO;
+import com.fsega.ai_project_manager.controller.dto.TaskCreateDTO;
 import com.fsega.ai_project_manager.controller.dto.TaskDTO;
 import com.fsega.ai_project_manager.service.ProjectService;
 import com.fsega.ai_project_manager.service.TaskService;
@@ -54,5 +55,10 @@ public class ProjectController {
     @GetMapping("/{projectId}/tasks")
     public ResponseEntity<List<TaskDTO>> getTasksByProjectId(@PathVariable Long projectId) {
         return ResponseEntity.ok(taskService.getTasksByProjectId(projectId));
+    }
+
+    @PostMapping("/{projectId}/tasks")
+    public ResponseEntity<TaskDTO> createTask(@PathVariable Long projectId, @Valid @RequestBody TaskCreateDTO taskDTO) {
+        return new ResponseEntity<>(taskService.createTask(projectId, taskDTO), HttpStatus.CREATED);
     }
 }

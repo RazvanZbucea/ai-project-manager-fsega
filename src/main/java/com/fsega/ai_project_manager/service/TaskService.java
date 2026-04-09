@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -45,14 +44,14 @@ public class TaskService {
     }
 
     @Transactional
-    public TaskDTO createTask(TaskCreateDTO taskDTO) {
+    public TaskDTO createTask(Long projectId, TaskCreateDTO taskDTO) {
         Task task = new Task();
         task.setTitle(taskDTO.title());
         task.setDescription(taskDTO.description());
         task.setStatus(Status.valueOf(taskDTO.status()));
 
-        Project project = projectRepository.findById(taskDTO.projectId())
-                .orElseThrow(() -> new EntityNotFoundException("Project not found with id: " + taskDTO.projectId()));
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new EntityNotFoundException("Project not found with id: " + projectId));
         task.setProject(project);
 
         assignTaskToUser(task, taskDTO.assignedName());
@@ -86,6 +85,9 @@ public class TaskService {
     private TaskDTO convertToDTO(Task task) {
 
         String assigneeName = task.getAssignedTo() != null ? task.getAssignedTo().getUsername() : "Unassigned";
+        if (task.getAssignedTo() != null && task.getAssignedTo().isDeleted()) {
+            assigneeName += " (Dezactivat)";
+        }
         String status = task.getStatus() != null ? task.getStatus().name() : "TO_DO";
 
         return new TaskDTO(
