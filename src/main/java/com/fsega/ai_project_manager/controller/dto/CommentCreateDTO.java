@@ -4,5 +4,5 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record CommentCreateDTO(@NotBlank @Size(max = 2000, message = "Comentariul este prea lung") String text,
-                               String author) {
+                               @NotBlank String author) {
 }

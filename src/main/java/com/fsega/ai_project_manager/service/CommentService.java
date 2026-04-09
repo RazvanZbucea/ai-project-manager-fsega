@@ -1,5 +1,6 @@
 package com.fsega.ai_project_manager.service;
 
+import com.fsega.ai_project_manager.controller.dto.CommentCreateDTO;
 import com.fsega.ai_project_manager.controller.dto.CommentDTO;
 import com.fsega.ai_project_manager.controller.dto.CommentUpdateDTO;
 import com.fsega.ai_project_manager.model.Comment;
@@ -42,7 +43,7 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentDTO createComment(Long taskId, CommentDTO commentDTO) {
+    public CommentDTO createComment(Long taskId, CommentCreateDTO commentDTO) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new EntityNotFoundException("Task not found with id: " + taskId));
 

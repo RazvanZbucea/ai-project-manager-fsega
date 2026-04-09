@@ -3,6 +3,8 @@ package com.fsega.ai_project_manager.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -15,6 +17,8 @@ import java.util.Set;
 
 @Getter
 @Setter
+@SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id=?")
+@SQLRestriction("is_deleted = false")
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "users")
@@ -44,6 +48,9 @@ public class User {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean isDeleted = false;
+
     @ManyToMany(mappedBy = "users")
     private Set<Project> projects = new HashSet<>();
 
@@ -53,10 +60,10 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "assignedTo", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "assignedTo")
     private List<Task> assignedTasks = new ArrayList<>();
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "author")
     private List<Comment> comments = new ArrayList<>();
 
 }
