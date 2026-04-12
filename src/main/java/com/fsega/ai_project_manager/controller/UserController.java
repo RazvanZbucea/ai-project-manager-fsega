@@ -1,12 +1,10 @@
 package com.fsega.ai_project_manager.controller;
 
-import com.fsega.ai_project_manager.controller.dto.UserCreateDTO;
 import com.fsega.ai_project_manager.controller.dto.UserDTO;
 import com.fsega.ai_project_manager.controller.dto.UserUpdateDTO;
 import com.fsega.ai_project_manager.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,11 +24,6 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUserById(id));
-    }
-
-    @PostMapping
-    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserCreateDTO userDTO) {
-        return new ResponseEntity<>(userService.createUser(userDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
