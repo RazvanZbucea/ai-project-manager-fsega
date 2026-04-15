@@ -4,11 +4,9 @@ import com.fsega.ai_project_manager.controller.dto.CommentCreateDTO;
 import com.fsega.ai_project_manager.controller.dto.CommentDTO;
 import com.fsega.ai_project_manager.controller.dto.CommentUpdateDTO;
 import com.fsega.ai_project_manager.model.Comment;
-import com.fsega.ai_project_manager.model.Project;
 import com.fsega.ai_project_manager.model.Task;
 import com.fsega.ai_project_manager.model.User;
 import com.fsega.ai_project_manager.repository.CommentRepository;
-import com.fsega.ai_project_manager.repository.ProjectRepository;
 import com.fsega.ai_project_manager.repository.TaskRepository;
 import com.fsega.ai_project_manager.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -45,7 +43,7 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentDTO createComment(Long taskId, CommentCreateDTO commentDTO) {
+    public CommentDTO createComment(Long taskId, CommentCreateDTO commentDTO, String username) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new EntityNotFoundException("Task not found with id: " + taskId));
 
@@ -53,7 +51,7 @@ public class CommentService {
         comment.setText(commentDTO.text());
         comment.setTask(task);
 
-        assignCommentToUser(comment, commentDTO.author());
+        assignCommentToUser(comment, username);
 
         Comment savedComment = commentRepository.save(comment);
 

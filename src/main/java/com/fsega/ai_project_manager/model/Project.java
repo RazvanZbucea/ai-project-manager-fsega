@@ -39,6 +39,9 @@ public class Project {
     @Column(updatable = false)
     private String createdBy;
 
+    @LastModifiedDate
+    private String updatedBy;
+
     @ManyToMany
     @JoinTable(name = "project_user",
             joinColumns = @JoinColumn(name = "project_id"),

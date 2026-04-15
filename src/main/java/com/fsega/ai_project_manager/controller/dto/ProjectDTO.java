@@ -14,5 +14,6 @@ public record ProjectDTO(
 
         String updatedAt,
 
-        String createdBy) {
+        String createdBy,
+        String updatedBy) {
 }

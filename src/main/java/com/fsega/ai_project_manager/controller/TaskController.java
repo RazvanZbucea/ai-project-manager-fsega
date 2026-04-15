@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -46,7 +47,7 @@ public class TaskController {
     }
 
     @PostMapping("/{taskId}/comments")
-    public ResponseEntity<CommentDTO> createComment(@PathVariable Long taskId, @RequestBody CommentCreateDTO commentDTO) {
-        return new ResponseEntity<>(commentService.createComment(taskId, commentDTO), HttpStatus.CREATED);
+    public ResponseEntity<CommentDTO> createComment(@PathVariable Long taskId, @RequestBody CommentCreateDTO commentDTO, Principal principal) {
+        return new ResponseEntity<>(commentService.createComment(taskId, commentDTO, principal.getName()), HttpStatus.CREATED);
     }
 }
