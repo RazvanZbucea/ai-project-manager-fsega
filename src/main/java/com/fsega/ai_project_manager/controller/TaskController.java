@@ -1,6 +1,9 @@
 package com.fsega.ai_project_manager.controller;
 
-import com.fsega.ai_project_manager.controller.dto.*;
+import com.fsega.ai_project_manager.controller.dto.CommentCreateDTO;
+import com.fsega.ai_project_manager.controller.dto.CommentDTO;
+import com.fsega.ai_project_manager.controller.dto.TaskDTO;
+import com.fsega.ai_project_manager.controller.dto.TaskUpdateDTO;
 import com.fsega.ai_project_manager.service.CommentService;
 import com.fsega.ai_project_manager.service.TaskService;
 import jakarta.validation.Valid;
@@ -24,13 +27,13 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getTaskById(id));
     }
 
-    @PreAuthorize("hasRole('ADMIN') or @taskService.isAssignee(#id, authentication.name)")
+    @PreAuthorize("hasRole('ADMIN') or @taskService.isAssignee(#id, authentication.name) or @projectService.isProjectOwner(#id, authentication.name)")
     @PutMapping("/{id}")
     public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @Valid @RequestBody TaskUpdateDTO taskDTO) {
         return ResponseEntity.ok(taskService.updateTask(id, taskDTO));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    @PreAuthorize("hasRole('ADMIN') or @projectService.isProjectOwner(#id, authentication.name)")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         taskService.deleteTaskById(id);

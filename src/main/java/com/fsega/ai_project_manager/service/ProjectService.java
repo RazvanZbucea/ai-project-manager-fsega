@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -63,12 +62,19 @@ public class ProjectService {
     }
 
     @Transactional
-    public void assignUserToProject(Long projectId, Long userId){
+    public void assignUserToProject(Long projectId, Long userId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("Project not found with id: " + projectId));
-        User user =  userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
         project.addUser(user);
+    }
+
+    public boolean isProjectOwner(Long id, String username) {
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Project not found with id: " + id));
+
+        return project.getCreatedBy().equals(username);
     }
 
     private ProjectDTO convertToDTO(Project project) {

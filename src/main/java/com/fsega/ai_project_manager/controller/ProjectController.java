@@ -37,20 +37,20 @@ public class ProjectController {
         return new ResponseEntity<>(projectService.createProject(projectDTO), HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    @PreAuthorize("hasRole('ADMIN') or @projectService.isProjectOwner(#id, authentication.name)")
     @PutMapping("/{id}")
     public ResponseEntity<ProjectDTO> updateProject(@PathVariable Long id, @Valid @RequestBody ProjectDTO projectDTO) {
         return ResponseEntity.ok(projectService.updateProject(id, projectDTO));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or @projectService.isProjectOwner(#id, authentication.name)")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
         projectService.deleteProjectById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    @PreAuthorize("hasRole('ADMIN') or @projectService.isProjectOwner(#id, authentication.name)")
     @PostMapping("/{projectId}/users/{userId}")
     public ResponseEntity<Void> assignUserToProject(@PathVariable Long projectId, @PathVariable Long userId) {
         projectService.assignUserToProject(projectId, userId);
@@ -62,7 +62,7 @@ public class ProjectController {
         return ResponseEntity.ok(taskService.getTasksByProjectId(projectId));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    @PreAuthorize("hasRole('ADMIN') or @projectService.isProjectOwner(#id, authentication.name)")
     @PostMapping("/{projectId}/tasks")
     public ResponseEntity<TaskDTO> createTask(@PathVariable Long projectId, @Valid @RequestBody TaskCreateDTO taskDTO) {
         return new ResponseEntity<>(taskService.createTask(projectId, taskDTO), HttpStatus.CREATED);
