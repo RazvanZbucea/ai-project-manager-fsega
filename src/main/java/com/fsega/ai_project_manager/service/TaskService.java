@@ -82,6 +82,13 @@ public class TaskService {
         taskRepository.deleteById(id);
     }
 
+    public boolean isAssignee(Long id, String username) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Task not found with id: " + id));
+
+        return task.getAssignedTo().getUsername().equals(username);
+    }
+
     private TaskDTO convertToDTO(Task task) {
 
         String assigneeName = task.getAssignedTo() != null ? task.getAssignedTo().getUsername() : "Unassigned";

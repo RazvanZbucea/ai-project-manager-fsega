@@ -74,6 +74,13 @@ public class CommentService {
         commentRepository.deleteById(id);
     }
 
+    public boolean isAuthor(Long id, String username) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Comment not found cu id: " + id));
+
+        return comment.getAuthor().getUsername().equals(username);
+    }
+
     private CommentDTO convertToDTO(Comment comment) {
         String authorName = comment.getAuthor().getUsername();
         if (comment.getAuthor().isDeleted()) {
