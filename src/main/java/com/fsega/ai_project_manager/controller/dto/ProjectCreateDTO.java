@@ -2,17 +2,10 @@ package com.fsega.ai_project_manager.controller.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record ProjectDTO(
-        Long id,
+public record ProjectCreateDTO(
 
         @NotBlank(message = "Numele este obligatoriu")
         String name,
 
-        String description,
-
-        String createdAt,
-
-        String updatedAt,
-
-        String createdBy) {
+        String description) {
 }

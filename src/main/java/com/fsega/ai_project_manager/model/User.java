@@ -41,6 +41,7 @@ public class User {
     private String lastName;
 
     @CreatedDate
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate

@@ -29,6 +29,7 @@ public class Project {
     private String description;
 
     @CreatedDate
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate

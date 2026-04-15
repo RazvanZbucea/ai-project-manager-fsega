@@ -104,6 +104,7 @@ public class TaskService {
                 status,
                 task.getCreatedAt().toString(),
                 task.getUpdatedAt().toString(),
+                task.getUpdatedBy(),
                 assigneeName
         );
     }

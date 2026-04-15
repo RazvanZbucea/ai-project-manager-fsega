@@ -1,6 +1,7 @@
 package com.fsega.ai_project_manager.exception;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -40,9 +42,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGenericException(Exception ex) {
-
-        System.err.println("Eroare neprevazuta interceptata: " + ex.getMessage());
-        ex.printStackTrace();
+        log.error("A apărut o eroare neprevăzută", ex);
 
         return new ResponseEntity<>("A apărut o eroare internă a serverului. Vă rugăm să încercați mai târziu.", HttpStatus.INTERNAL_SERVER_ERROR);
     }

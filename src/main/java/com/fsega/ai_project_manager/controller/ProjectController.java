@@ -1,8 +1,6 @@
 package com.fsega.ai_project_manager.controller;
 
-import com.fsega.ai_project_manager.controller.dto.ProjectDTO;
-import com.fsega.ai_project_manager.controller.dto.TaskCreateDTO;
-import com.fsega.ai_project_manager.controller.dto.TaskDTO;
+import com.fsega.ai_project_manager.controller.dto.*;
 import com.fsega.ai_project_manager.service.ProjectService;
 import com.fsega.ai_project_manager.service.TaskService;
 import jakarta.validation.Valid;
@@ -33,13 +31,13 @@ public class ProjectController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     @PostMapping
-    public ResponseEntity<ProjectDTO> createProject(@Valid @RequestBody ProjectDTO projectDTO) {
+    public ResponseEntity<ProjectDTO> createProject(@Valid @RequestBody ProjectCreateDTO projectDTO) {
         return new ResponseEntity<>(projectService.createProject(projectDTO), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMIN') or @projectService.isProjectOwner(#id, authentication.name)")
     @PutMapping("/{id}")
-    public ResponseEntity<ProjectDTO> updateProject(@PathVariable Long id, @Valid @RequestBody ProjectDTO projectDTO) {
+    public ResponseEntity<ProjectDTO> updateProject(@PathVariable Long id, @Valid @RequestBody ProjectUpdateDTO projectDTO) {
         return ResponseEntity.ok(projectService.updateProject(id, projectDTO));
     }
 

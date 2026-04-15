@@ -1,6 +1,8 @@
 package com.fsega.ai_project_manager.service;
 
+import com.fsega.ai_project_manager.controller.dto.ProjectCreateDTO;
 import com.fsega.ai_project_manager.controller.dto.ProjectDTO;
+import com.fsega.ai_project_manager.controller.dto.ProjectUpdateDTO;
 import com.fsega.ai_project_manager.model.Project;
 import com.fsega.ai_project_manager.model.User;
 import com.fsega.ai_project_manager.repository.ProjectRepository;
@@ -33,7 +35,7 @@ public class ProjectService {
     }
 
     @Transactional
-    public ProjectDTO createProject(ProjectDTO projectDTO) {
+    public ProjectDTO createProject(ProjectCreateDTO projectDTO) {
         Project project = new Project();
         project.setName(projectDTO.name());
         project.setDescription(projectDTO.description());
@@ -44,7 +46,7 @@ public class ProjectService {
     }
 
     @Transactional
-    public ProjectDTO updateProject(Long id, ProjectDTO projectDTO) {
+    public ProjectDTO updateProject(Long id, ProjectUpdateDTO projectDTO) {
 
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Project not found with id: " + id));
@@ -82,6 +84,7 @@ public class ProjectService {
                 project.getName(),
                 project.getDescription(),
                 project.getCreatedAt().toString(),
-                project.getUpdatedAt().toString());
+                project.getUpdatedAt().toString(),
+                project.getCreatedBy());
     }
 }
