@@ -85,6 +85,7 @@ public class ProjectService {
                 project.getDescription(),
                 project.getCreatedAt().toString(),
                 project.getUpdatedAt().toString(),
-                project.getCreatedBy());
+                project.getCreatedBy(),
+                project.getUpdatedBy());
     }
 }

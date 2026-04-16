@@ -1,9 +1,13 @@
 package com.fsega.ai_project_manager.service;
 
+import com.fsega.ai_project_manager.controller.dto.AdminUserCreateDTO;
 import com.fsega.ai_project_manager.controller.dto.UserCreateDTO;
 import com.fsega.ai_project_manager.controller.dto.UserDTO;
 import com.fsega.ai_project_manager.controller.dto.UserUpdateDTO;
+import com.fsega.ai_project_manager.model.Role;
 import com.fsega.ai_project_manager.model.User;
+import com.fsega.ai_project_manager.model.enums.Name;
+import com.fsega.ai_project_manager.repository.RoleRepository;
 import com.fsega.ai_project_manager.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +22,7 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Transactional(readOnly = true)
     public List<UserDTO> getAllUsers() {
@@ -42,6 +47,10 @@ public class UserService {
         user.setFirstName(userDTO.firstName());
         user.setLastName(userDTO.lastName());
 
+        Role defaultRole = roleRepository.findByName(Name.DEVELOPER)
+                .orElseThrow(() -> new IllegalStateException("Rolul de bază nu există în sistem. Contactează administratorul."));
+        user.getRoles().add(defaultRole);
+
         User savedUser = userRepository.save(user);
 
         return convertToDTO(savedUser);
@@ -64,6 +73,25 @@ public class UserService {
             throw new EntityNotFoundException("User not found with id: " + id);
         }
         userRepository.deleteById(id);
+    }
+
+    @Transactional
+    public UserDTO adminCreateUser(AdminUserCreateDTO userDTO) {
+        User user = new User();
+        user.setUsername(userDTO.username());
+        user.setEmail(userDTO.email());
+        user.setPassword(passwordEncoder.encode(userDTO.password()));
+        user.setFirstName(userDTO.firstName());
+        user.setLastName(userDTO.lastName());
+
+        Role defaultRole = roleRepository.findByName(Name.valueOf(userDTO.role()))
+                .orElseThrow(() -> new IllegalStateException("Rolul de bază nu există în sistem. Contactează administratorul."));
+
+        user.getRoles().add(defaultRole);
+
+        User savedUser = userRepository.save(user);
+
+        return convertToDTO(savedUser);
     }
 
     public boolean isCurrentUser(Long id, String username) {

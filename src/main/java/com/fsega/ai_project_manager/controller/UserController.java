@@ -1,10 +1,12 @@
 package com.fsega.ai_project_manager.controller;
 
+import com.fsega.ai_project_manager.controller.dto.AdminUserCreateDTO;
 import com.fsega.ai_project_manager.controller.dto.UserDTO;
 import com.fsega.ai_project_manager.controller.dto.UserUpdateDTO;
 import com.fsega.ai_project_manager.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,12 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUserById(id));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/api/users")
+    public ResponseEntity<UserDTO> adminCreateUser(@Valid @RequestBody AdminUserCreateDTO userDTO) {
+        return new ResponseEntity<>(userService.adminCreateUser(userDTO), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMIN') or @userService.isCurrentUser(#id, authentication.name)")
