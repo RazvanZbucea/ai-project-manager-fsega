@@ -68,6 +68,7 @@ public class UserService {
         return convertToDTO(user);
     }
 
+    @Transactional
     public void deleteUserById(Long id) {
         if (!userRepository.existsById(id)) {
             throw new EntityNotFoundException("User not found with id: " + id);

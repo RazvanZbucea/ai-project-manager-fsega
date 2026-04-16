@@ -67,6 +67,7 @@ public class CommentService {
         return convertToDTO(comment);
     }
 
+    @Transactional
     public void deleteCommentById(Long id) {
         if (!commentRepository.existsById(id)) {
             throw new EntityNotFoundException("Comment not found with id: " + id);

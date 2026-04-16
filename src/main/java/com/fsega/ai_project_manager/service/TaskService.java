@@ -75,6 +75,7 @@ public class TaskService {
         return convertToDTO(task);
     }
 
+    @Transactional
     public void deleteTaskById(Long id) {
         if (!taskRepository.existsById(id)) {
             throw new EntityNotFoundException("Task not found with id: " + id);

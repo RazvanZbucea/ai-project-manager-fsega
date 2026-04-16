@@ -2,6 +2,7 @@ package com.fsega.ai_project_manager.controller;
 
 import com.fsega.ai_project_manager.controller.dto.*;
 import com.fsega.ai_project_manager.service.ProjectService;
+import com.fsega.ai_project_manager.service.TaskGenerationService;
 import com.fsega.ai_project_manager.service.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.List;
 public class ProjectController {
     private final ProjectService projectService;
     private final TaskService taskService;
+    private final TaskGenerationService taskGenerationService;
 
     @GetMapping
     public ResponseEntity<List<ProjectDTO>> getProjects(Principal principal) {
@@ -49,7 +51,7 @@ public class ProjectController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasRole('ADMIN') or @projectService.isProjectOwner(#id, authentication.name)")
+    @PreAuthorize("hasRole('ADMIN') or @projectService.isProjectOwner(#projectId, authentication.name)")
     @PostMapping("/{projectId}/users/{userId}")
     public ResponseEntity<Void> assignUserToProject(@PathVariable Long projectId, @PathVariable Long userId) {
         projectService.assignUserToProject(projectId, userId);
@@ -61,9 +63,15 @@ public class ProjectController {
         return ResponseEntity.ok(taskService.getTasksByProjectId(projectId));
     }
 
-    @PreAuthorize("hasRole('ADMIN') or @projectService.isProjectOwner(#id, authentication.name)")
+    @PreAuthorize("hasRole('ADMIN') or @projectService.isProjectOwner(#projectId, authentication.name)")
     @PostMapping("/{projectId}/tasks")
     public ResponseEntity<TaskDTO> createTask(@PathVariable Long projectId, @Valid @RequestBody TaskCreateDTO taskDTO) {
         return new ResponseEntity<>(taskService.createTask(projectId, taskDTO), HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or @projectService.isProjectOwner(#projectId, authentication.name)")
+    @PostMapping("/generate-tasks")
+    public ResponseEntity<List<GeneratedTaskDTO>> generateTasks(String description) {
+        return new ResponseEntity<>(taskGenerationService.generateTasksFromDescription(description), HttpStatus.CREATED);
     }
 }

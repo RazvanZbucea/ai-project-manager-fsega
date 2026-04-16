@@ -67,6 +67,7 @@ public class ProjectService {
         return convertToDTO(project);
     }
 
+    @Transactional
     public void deleteProjectById(Long id) {
         if (!projectRepository.existsById(id)) {
             throw new EntityNotFoundException("Project not found with id: " + id);
