@@ -9,6 +9,7 @@ import com.fsega.ai_project_manager.repository.ProjectRepository;
 import com.fsega.ai_project_manager.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +22,18 @@ public class ProjectService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public List<ProjectDTO> getAllProjects() {
-        return projectRepository.findAll().stream()
+    public List<ProjectDTO> getProjects(String username) {
+
+        boolean isAdmin = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (isAdmin) {
+            return projectRepository.findAll().stream()
+                    .map(this::convertToDTO)
+                    .toList();
+        }
+
+        return projectRepository.findProjectsForUser(username).stream()
                 .map(this::convertToDTO)
                 .toList();
     }
@@ -72,6 +83,7 @@ public class ProjectService {
         project.addUser(user);
     }
 
+    @Transactional(readOnly = true)
     public boolean isProjectOwner(Long id, String username) {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Project not found with id: " + id));

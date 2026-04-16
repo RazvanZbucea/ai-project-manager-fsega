@@ -33,7 +33,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/api/users")
     public ResponseEntity<UserDTO> adminCreateUser(@Valid @RequestBody AdminUserCreateDTO userDTO) {
-        return new ResponseEntity<>(userService.adminCreateUser(userDTO), HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.createUserWithSpecificRole(userDTO), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMIN') or @userService.isCurrentUser(#id, authentication.name)")

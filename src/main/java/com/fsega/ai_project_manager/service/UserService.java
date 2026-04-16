@@ -76,7 +76,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO adminCreateUser(AdminUserCreateDTO userDTO) {
+    public UserDTO createUserWithSpecificRole(AdminUserCreateDTO userDTO) {
         User user = new User();
         user.setUsername(userDTO.username());
         user.setEmail(userDTO.email());
@@ -120,6 +120,9 @@ public class UserService {
         try {
             Role role = roleRepository.findByName(Name.valueOf(roleName))
                     .orElseThrow(() -> new IllegalStateException("Rolul de bază nu există în sistem. Contactează administratorul."));
+            if (!user.getRoles().contains(role)) {
+                throw new IllegalStateException("Utilizatorul nu deține acest rol.");
+            }
             user.getRoles().remove(role);
         } catch (IllegalArgumentException e) {
             throw new IllegalStateException("Rolul specificat nu este valid. Rolurile valide sunt: ADMIN, MANAGER, DEVELOPER.");
@@ -133,6 +136,7 @@ public class UserService {
         return convertToDTO(savedUser);
     }
 
+    @Transactional(readOnly = true)
     public boolean isCurrentUser(Long id, String username) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));

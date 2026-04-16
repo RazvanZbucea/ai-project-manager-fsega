@@ -74,6 +74,7 @@ public class CommentService {
         commentRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     public boolean isAuthor(Long id, String username) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Comment not found cu id: " + id));

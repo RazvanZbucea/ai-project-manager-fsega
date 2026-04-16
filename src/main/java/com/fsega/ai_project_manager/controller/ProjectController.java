@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -20,8 +21,8 @@ public class ProjectController {
     private final TaskService taskService;
 
     @GetMapping
-    public ResponseEntity<List<ProjectDTO>> getProjects() {
-        return ResponseEntity.ok(projectService.getAllProjects());
+    public ResponseEntity<List<ProjectDTO>> getProjects(Principal principal) {
+        return ResponseEntity.ok(projectService.getProjects(principal.getName()));
     }
 
     @GetMapping("/{id}")

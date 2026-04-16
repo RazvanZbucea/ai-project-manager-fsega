@@ -82,6 +82,7 @@ public class TaskService {
         taskRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     public boolean isAssignee(Long id, String username) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Task not found with id: " + id));
