@@ -84,13 +84,52 @@ public class UserService {
         user.setFirstName(userDTO.firstName());
         user.setLastName(userDTO.lastName());
 
-        Role defaultRole = roleRepository.findByName(Name.valueOf(userDTO.role()))
-                .orElseThrow(() -> new IllegalStateException("Rolul de bază nu există în sistem. Contactează administratorul."));
-
-        user.getRoles().add(defaultRole);
+        try {
+            Role defaultRole = roleRepository.findByName(Name.valueOf(userDTO.role()))
+                    .orElseThrow(() -> new IllegalStateException("Rolul de bază nu există în sistem. Contactează administratorul."));
+            user.getRoles().add(defaultRole);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalStateException("Rolul specificat nu este valid. Rolurile valide sunt: ADMIN, MANAGER, DEVELOPER.");
+        }
 
         User savedUser = userRepository.save(user);
 
+        return convertToDTO(savedUser);
+    }
+
+    @Transactional
+    public UserDTO addRoleToUser(Long id, String roleName) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+        try {
+            Role role = roleRepository.findByName(Name.valueOf(roleName))
+                    .orElseThrow(() -> new IllegalStateException("Rolul de bază nu există în sistem. Contactează administratorul."));
+            user.getRoles().add(role);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalStateException("Rolul specificat nu este valid. Rolurile valide sunt: ADMIN, MANAGER, DEVELOPER.");
+        }
+
+        User savedUser = userRepository.save(user);
+        return convertToDTO(savedUser);
+    }
+
+    @Transactional
+    public UserDTO removeRoleFromUser(Long id, String roleName) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+        try {
+            Role role = roleRepository.findByName(Name.valueOf(roleName))
+                    .orElseThrow(() -> new IllegalStateException("Rolul de bază nu există în sistem. Contactează administratorul."));
+            user.getRoles().remove(role);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalStateException("Rolul specificat nu este valid. Rolurile valide sunt: ADMIN, MANAGER, DEVELOPER.");
+        }
+
+        if (user.getRoles().isEmpty()) {
+            throw new IllegalStateException("Un utilizator trebuie să aibă cel puțin un rol. Adaugă un rol înainte de a elimina acest rol.");
+        }
+
+        User savedUser = userRepository.save(user);
         return convertToDTO(savedUser);
     }
 

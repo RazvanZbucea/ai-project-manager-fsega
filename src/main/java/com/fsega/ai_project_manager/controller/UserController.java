@@ -48,4 +48,17 @@ public class UserController {
         userService.deleteUserById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{id}/roles/{roleName}")
+    public ResponseEntity<UserDTO> addRoleToUser(@PathVariable Long id, @PathVariable String roleName) {
+        return new ResponseEntity<>(userService.addRoleToUser(id, roleName), HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}/roles/{roleName}")
+    public ResponseEntity<Void> deleteRoleFromUser(@PathVariable Long id, @PathVariable String roleName) {
+        userService.removeRoleFromUser(id, roleName);
+        return ResponseEntity.noContent().build();
+    }
 }
