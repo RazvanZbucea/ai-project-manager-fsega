@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -89,6 +90,25 @@ public class TaskService {
                 .orElseThrow(() -> new EntityNotFoundException("Task not found with id: " + id));
 
         return task.getAssignedTo().getUsername().equals(username);
+    }
+
+    @Transactional
+    public List<TaskDTO> createTasksBulk(Long projectId, List<TaskCreateDTO> taskCreateDTOs) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new EntityNotFoundException("Project not found with id: " + projectId));
+
+        List<TaskDTO> taskDTOs = new ArrayList<>();
+        for (TaskCreateDTO taskDTO : taskCreateDTOs) {
+            Task task = new Task();
+            task.setTitle(taskDTO.title());
+            task.setDescription(taskDTO.description());
+            task.setStatus(Status.valueOf(taskDTO.status()));
+            assignTaskToUser(task, taskDTO.assignedName());
+            task.setProject(project);
+
+            taskDTOs.add(convertToDTO(taskRepository.save(task)));
+        }
+        return taskDTOs;
     }
 
     private TaskDTO convertToDTO(Task task) {

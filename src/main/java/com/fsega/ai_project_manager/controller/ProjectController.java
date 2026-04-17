@@ -69,9 +69,13 @@ public class ProjectController {
         return new ResponseEntity<>(taskService.createTask(projectId, taskDTO), HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('ADMIN') or @projectService.isProjectOwner(#projectId, authentication.name)")
     @PostMapping("/generate-tasks")
     public ResponseEntity<List<GeneratedTaskDTO>> generateTasks(String description) {
         return new ResponseEntity<>(taskGenerationService.generateTasksFromDescription(description), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/{projectId}/tasks/bulk")
+    public ResponseEntity<List<TaskDTO>> createTasksBulk(@PathVariable Long projectId, @Valid @RequestBody List<TaskCreateDTO> taskDTOs) {
+        return new ResponseEntity<>(taskService.createTasksBulk(projectId, taskDTOs), HttpStatus.CREATED);
     }
 }
