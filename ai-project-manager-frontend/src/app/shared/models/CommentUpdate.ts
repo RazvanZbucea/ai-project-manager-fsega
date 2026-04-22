@@ -1,0 +1,4 @@
+interface CommentUpdate {
+  text: string
+
+}
