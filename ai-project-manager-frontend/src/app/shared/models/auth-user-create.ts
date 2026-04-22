@@ -1,4 +1,4 @@
-interface AdminUserCreate {
+interface AuthUserCreate {
   username: string,
   email: string
   password: string,
