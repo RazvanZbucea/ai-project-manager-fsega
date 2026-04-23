@@ -29,4 +29,7 @@ export class LoginComponent {
       console.log('Datele pregătite pentru backend:', loginRequest);
     }
   }
+
+  get username() { return this.loginForm.get('username'); }
+  get password() { return this.loginForm.get('password'); }
 }
