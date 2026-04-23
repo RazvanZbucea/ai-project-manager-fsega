@@ -26,7 +26,14 @@ export class LoginComponent {
         password: this.loginForm.value.password ?? ''
       };
 
-      console.log('Datele pregătite pentru backend:', loginRequest);
+      this.authService.login(loginRequest).subscribe({
+        next: (response) => {
+          console.log('Login successful:', response);
+        },
+        error: (error) => {
+          console.error('Login failed:', error);
+        }
+      });
     }
   }
 
