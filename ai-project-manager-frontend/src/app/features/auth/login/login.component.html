@@ -3,7 +3,7 @@
     <div class="form-group">
       <label for="username">Username</label>
       <input id="username" type="text" formControlName="username" placeholder="Username">
-       <span *ngIf="loginForm.get('username').touched && loginForm.get('username')?.errors?.required">
+      <span *ngIf="loginForm.get('username').touched && loginForm.get('username')?.errors?.required">
         Username is required.
       </span>
       <label for="password">Password</label>
