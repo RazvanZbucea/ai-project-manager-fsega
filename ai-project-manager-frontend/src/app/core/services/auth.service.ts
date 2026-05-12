@@ -1,7 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {tap} from 'rxjs';
-import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +8,7 @@ import {Router} from '@angular/router';
 export class AuthService {
   private readonly apiUrl: string = 'http://localhost:8089/api/auth/login';
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient) {
   }
 
   login(loginRequest: LoginRequest) {
@@ -18,11 +17,7 @@ export class AuthService {
     }));
   }
 
-  isAuthenticated(){
-    if(localStorage.getItem('jwToken')){
-      return true;
-    }
-    this.router.navigate(['/login']);
-    return  false;
+  isAuthenticated() {
+    return !!localStorage.getItem('jwToken');
   }
 }
