@@ -20,4 +20,8 @@ export class AuthService {
   isAuthenticated() {
     return !!localStorage.getItem('jwToken');
   }
+
+  getAuthToken() {
+    return localStorage.getItem('jwToken');
+  }
 }
