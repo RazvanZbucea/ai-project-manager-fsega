@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthService} from '../../../core/services/auth.service';
 import {CommonModule} from '@angular/common';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'login-component',
@@ -14,8 +15,9 @@ export class LoginComponent {
     username: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
   })
+  errorMessage: string | null = null;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private router: Router) {
   }
 
   onSubmit() {
@@ -29,9 +31,11 @@ export class LoginComponent {
       this.authService.login(loginRequest).subscribe({
         next: (response) => {
           console.log('Login successful:', response);
+          this.router.navigate(['/projects']);
         },
         error: (error) => {
           console.error('Login failed:', error);
+          this.errorMessage = 'Email sau parolă incorectă. Te rugăm să încerci din nou.';
         }
       });
     }

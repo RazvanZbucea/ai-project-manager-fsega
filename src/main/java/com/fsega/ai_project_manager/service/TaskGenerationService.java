@@ -17,7 +17,7 @@ public class TaskGenerationService {
 
     public List<GeneratedTaskDTO> generateTasksFromDescription(String projectDescription) {
         String systemPrompt = """
-                Ești un manager de proiect agil.
+                Ești un manager de proiect Agile.
                 Te rog să analizezi următoarea descriere de proiect și să generezi o listă de task-uri necesare.
                 Pentru fiecare task, oferă un titlu scurt, o descriere detaliată și sugerează statusul inițial (TO_DO).
                 """;
