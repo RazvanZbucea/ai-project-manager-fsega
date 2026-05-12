@@ -3,11 +3,16 @@ import {inject} from '@angular/core';
 import {AuthService} from '../services/auth.service';
 
 export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) {
-  // Inject the current `AuthService` and use it to get an authentication token:
-  const authToken = inject(AuthService).getAuthToken();
-  // Clone the request to add the authentication header.
-  const newReq = req.clone({
-    headers: req.headers.append('X-Authentication-Token', authToken),
-  });
-  return next(newReq);
+  const authToken = inject(AuthService).getAuthToken(); // Presupunem că returnează string sau null
+
+  // Dacă avem token, clonăm request-ul și adăugăm header-ul standard
+  if (authToken) {
+    const clonedReq = req.clone({
+      headers: req.headers.set('Authorization', `Bearer ${authToken}`)
+    });
+    return next(clonedReq);
+  }
+
+  // Dacă nu avem token (ex: cerere de login), trimitem request-ul original
+  return next(req);
 }
