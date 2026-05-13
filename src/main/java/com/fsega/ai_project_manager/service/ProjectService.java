@@ -93,12 +93,14 @@ public class ProjectService {
     }
 
     private ProjectDTO convertToDTO(Project project) {
+
         return new ProjectDTO(project.getId(),
                 project.getName(),
                 project.getDescription(),
                 project.getCreatedAt().toString(),
                 project.getUpdatedAt().toString(),
                 project.getCreatedBy(),
-                project.getUpdatedBy());
+                project.getUpdatedBy(),
+                project.isDeleted() ? "Archived" : "Active");
     }
 }

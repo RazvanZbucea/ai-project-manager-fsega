@@ -3,8 +3,10 @@ package com.fsega.ai_project_manager.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -16,6 +18,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@SQLDelete(sql = "UPDATE project SET is_deleted = true WHERE id=?")
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 public class Project {
@@ -39,8 +42,11 @@ public class Project {
     @Column(updatable = false)
     private String createdBy;
 
-    @LastModifiedDate
+    @LastModifiedBy
     private String updatedBy;
+
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean isDeleted = false;
 
     @ManyToMany
     @JoinTable(name = "project_user",

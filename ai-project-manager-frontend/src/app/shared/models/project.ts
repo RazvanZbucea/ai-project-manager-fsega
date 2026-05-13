@@ -5,5 +5,6 @@ interface Project {
   createdAt: string,
   updatedAt: string,
   createdBy: string,
-  updatedBy: string
+  updatedBy: string,
+  status: string;
 }

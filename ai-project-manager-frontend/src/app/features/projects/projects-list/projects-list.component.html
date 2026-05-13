@@ -1,11 +1,20 @@
 <div class="container mx-auto p-4">
+  <button (click)="isCreatingProject = true">Creare Proiect Nou</button>
   <h2 class="text-2xl font-bold mb-4">Proiectele Mele</h2>
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    @if (isCreatingProject) {
+      <div class="border p-4 mb-4 bg-gray-50 rounded">
+        <form ...> ... </form>
+      </div>
+    }
     @for (project of projects(); track project.id) {
       <div class="border p-4 rounded shadow-sm">
         <h3 class="text-xl font-semibold">{{ project.name }}</h3>
         <p class="text-gray-600">{{ project.description }}</p>
+        <span class="inline-block mt-2 px-2 py-1 bg-blue-100 text-blue-800 rounded">
+          {{ project.status }}
+        </span>
       </div>
     } @empty {
       <p class="text-gray-500">Nu există niciun proiect disponibil.</p>

@@ -11,6 +11,7 @@ import { ProjectService } from '../../../core/services/project.service';
 })
 export class ProjectsListComponent {
   private projectService = inject(ProjectService);
+  isCreatingProject = false;
 
   projects = toSignal(this.projectService.getProjects(), { initialValue: [] });
 }
