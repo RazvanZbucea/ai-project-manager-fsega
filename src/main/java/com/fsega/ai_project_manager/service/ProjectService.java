@@ -101,6 +101,6 @@ public class ProjectService {
                 project.getUpdatedAt().toString(),
                 project.getCreatedBy(),
                 project.getUpdatedBy(),
-                project.isDeleted() ? "Archived" : "Active");
+                project.isDeleted());
     }
 }

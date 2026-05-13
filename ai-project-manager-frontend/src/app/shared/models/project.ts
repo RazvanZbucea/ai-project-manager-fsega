@@ -6,5 +6,5 @@ interface Project {
   updatedAt: string,
   createdBy: string,
   updatedBy: string,
-  status: string;
+  isDeleted: boolean;
 }
