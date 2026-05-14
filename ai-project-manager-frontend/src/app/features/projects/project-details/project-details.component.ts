@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {ProjectService} from '../../../core/services/project.service';
@@ -11,9 +11,10 @@ import {ProjectService} from '../../../core/services/project.service';
   styleUrls: ['./project-details.component.scss']
 })
 export class ProjectDetailsComponent implements OnInit {
-  project: Project | null = null;
-  tasks: Task[] = [];
-  isLoading: boolean = true;
+  // Transformăm variabilele clasice în Signals (Angular 17+ Best Practice)
+  project = signal<Project | null>(null);
+  tasks = signal<Task[]>([]);
+  isLoading = signal<boolean>(true); // Inițializat cu true
 
   constructor(
     private route: ActivatedRoute,
@@ -22,26 +23,26 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('Sunt în ngOnInit')
     const projectId = Number(this.route.snapshot.paramMap.get('id'));
 
     if (projectId) {
       this.loadProjectDetails(projectId);
       this.loadProjectTasks(projectId);
     } else {
-      this.isLoading = false;
+      this.isLoading.set(false); // Oprim loading-ul dacă id-ul e invalid
     }
   }
 
   loadProjectDetails(id: number): void {
     this.projectService.getProjectById(id).subscribe({
       next: (projectData) => {
-        this.project = projectData;
-        this.isLoading = false;
+        // Folosim .set() pentru a actualiza valoarea unui Signal
+        this.project.set(projectData);
+        this.isLoading.set(false); // UI-ul se va actualiza INSTANTANEU garantat
       },
       error: (error) => {
-        console.error('Eroare la încărcarea detaliilor proiectului:', error);
-        this.isLoading = false;
+        console.error('Eroare la încărcarea detaliilor:', error);
+        this.isLoading.set(false);
       }
     });
   }
@@ -49,11 +50,10 @@ export class ProjectDetailsComponent implements OnInit {
   loadProjectTasks(id: number): void {
     this.projectService.getTasksByProjectId(id).subscribe({
       next: (taskData) => {
-        console.log('[TaskService] Răspuns primit de la backend:', taskData);
-        this.tasks = taskData;
+        this.tasks.set(taskData);
       },
       error: (err) => {
-        console.error('[TaskService] Eroare la preluarea task-urilor:', err);
+        console.error('Eroare la preluarea task-urilor:', err);
       }
     });
   }

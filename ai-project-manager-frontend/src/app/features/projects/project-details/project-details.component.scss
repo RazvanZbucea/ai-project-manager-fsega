@@ -1,45 +1,64 @@
-@use "sass:color"; // Adăugăm importul pentru modulul modern de culori SCSS
+@use "sass:color"; // Import obligatoriu în Angular 17+ pentru manipularea culorilor
 
+// Containerul principal al paginii
+.page-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+// Butonul de înapoi
 .back-link-wrapper {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 
   .back-link {
-    color: #4a90e2; // Culoarea primară din proiectul tău
+    display: inline-flex;
+    align-items: center;
+    color: #4a90e2; // Culoarea ta primară
     text-decoration: none;
     font-weight: 600;
+    font-size: 1.05rem;
+    transition: color 0.3s ease;
 
     &:hover {
       text-decoration: underline;
-      // Înlocuim vechiul darken() cu funcția nouă color.adjust()
+      // Funcția modernă SCSS pentru întunecarea unei culori
       color: color.adjust(#4a90e2, $lightness: -15%);
     }
   }
 }
 
+// Cardul principal cu detaliile proiectului
 .project-details-card {
-  margin-bottom: 2.5rem;
+  margin-bottom: 3rem;
 
-  .page-title {
-    margin-top: 0;
-    margin-bottom: 1rem;
+  .card-header {
+    margin-bottom: 1.2rem;
+
+    .page-title {
+      margin: 0;
+      font-size: 2rem;
+      color: #2c3e50;
+    }
   }
 
   .description {
     font-size: 1.1rem;
-    line-height: 1.6;
-    color: #444;
-    white-space: pre-line;
+    line-height: 1.7;
+    color: #4a5568;
+    white-space: pre-line; // Păstrează enter-urile din baza de date
   }
 
   .meta-info {
-    margin-top: 1.5rem;
+    margin-top: 2rem;
     padding-top: 1rem;
-    border-top: 1px solid #e1e4e8;
-    font-size: 0.9rem;
-    color: #666;
+    border-top: 1px solid #e2e8f0;
+    font-size: 0.95rem;
+    color: #718096;
   }
 }
 
+// Header-ul secțiunii de task-uri (Titlu + Buton Adaugă)
 .section-header {
   display: flex;
   justify-content: space-between;
@@ -49,21 +68,27 @@
   .section-title {
     margin: 0;
     font-size: 1.5rem;
-    color: #333;
+    color: #2d3748;
   }
 }
 
-// Grila pentru cardurile de task-uri
+// Grila de afișare a task-urilor (Responsive dinamic)
 .task-grid {
   display: grid;
-  // Creează coloane dinamice: minim 300px lățime, dacă e spațiu se extind proporțional
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  // Creăm coloane de minim 320px lățime; dacă e spațiu, se pun pe același rând
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.5rem;
 
   .task-card {
     display: flex;
     flex-direction: column;
-    margin-bottom: 0; // Suprascriem marginea de jos dacă e setată pe clasa globală .card
+    margin-bottom: 0; // Anulează marginea default de la clasa globală .card
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
 
     .task-header {
       display: flex;
@@ -73,14 +98,15 @@
 
       .task-title {
         margin: 0;
-        font-size: 1.2rem;
-        color: #333;
+        font-size: 1.25rem;
+        color: #2d3748;
+        font-weight: 600;
       }
     }
 
     .task-description {
-      flex-grow: 1; // Împinge footer-ul mereu jos, chiar dacă descrierea e scurtă
-      color: #555;
+      flex-grow: 1; // Împinge footer-ul mereu jos, aliniind perfect toate cardurile
+      color: #4a5568;
       margin-bottom: 1.5rem;
       line-height: 1.5;
     }
@@ -88,27 +114,40 @@
     .task-footer {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       font-size: 0.85rem;
-      color: #777;
-      border-top: 1px solid #f0f0f0;
-      padding-top: 0.8rem;
+      color: #718096;
+      border-top: 1px solid #edf2f7;
+      padding-top: 1rem;
 
       strong {
-        color: #333;
+        color: #2d3748;
       }
     }
   }
 }
 
-// Stările de feedback
+// Stările UI (Loading, Empty, Error)
 .loading-state, .empty-state, .error-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 2rem;
   text-align: center;
-  padding: 3rem;
-  color: #666;
-  font-size: 1.1rem;
+  color: #718096;
+  font-size: 1.2rem;
+  font-weight: 500;
+  background-color: #f7fafc;
+  border-radius: 8px;
+  border: 1px dashed #cbd5e0;
 }
 
 .error-state {
-  color: #e74c3c; // Culoarea de eroare din proiectul tău
-  font-weight: bold;
+  color: #e53e3e;
+  background-color: #fff5f5;
+  border-color: #feb2b2;
+}
+
+.empty-state {
+  grid-column: 1 / -1; // Face ca acest card să ocupe tot lățimea grilei
 }

@@ -1,1 +1,82 @@
-/* You can add global styles to this file, and also import other style files */
+// src/styles.scss
+
+// 1. Variabile Globale (Paleta de culori și dimensiuni)
+$primary-color: #4a90e2;
+$primary-hover: #357abd;
+$text-main: #2d3748;
+$text-muted: #718096;
+$bg-light: #f7fafc;
+$border-light: #e2e8f0;
+$danger-color: #e53e3e;
+$success-color: #38a169;
+
+// 2. Reset și Tipografie de bază
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: $bg-light;
+  color: $text-main;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+// 3. Clase Globale Utilitare (Design System)
+
+// Card Global
+.card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid $border-light;
+  padding: 1.5rem;
+}
+
+// Buton Principal
+.btn-primary {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $primary-color;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+
+  &:hover {
+    background-color: $primary-hover;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(74, 144, 226, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Badge Global (pentru statusuri: TO_DO, IN_PROGRESS etc.)
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 9999px; // Face marginile perfect rotunde (pill shape)
+  background-color: #edf2f7; // Default (gri deschis)
+  color: #4a5568;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  /* Poți extinde asta ulterior pentru statusuri specifice, ex:
+  &.status-todo { background-color: #ebf8ff; color: #2b6cb0; }
+  &.status-done { background-color: #f0fff4; color: #276749; }
+  */
+}
