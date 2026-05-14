@@ -1,25 +1,33 @@
-<div>
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="username">Username</label>
-      <input id="username" type="text" formControlName="username" placeholder="Username">
+<div class="login-container">
+  <div class="login-card">
+    <h2>Autentificare</h2>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input id="username" type="text" formControlName="username" placeholder="Introduceți username">
 
-      @if (username?.touched && loginForm.get('username')?.errors?.['required']) {
-        <span>Username is required.</span>
-      }
+        @if (username?.touched && loginForm.get('username')?.errors?.['required']) {
+          <span class="error-text">Username-ul este obligatoriu.</span>
+        }
+      </div>
 
-      <label for="password">Password</label>
-      <input id="password" type="password" formControlName="password" placeholder="Password">
+      <div class="form-group">
+        <label for="password">Parolă</label>
+        <input id="password" type="password" formControlName="password" placeholder="Introduceți parola">
 
-      @if (password?.touched && loginForm.get('password')?.errors?.['required']) {
-        <span>Password is required.</span>
-      }
-    </div>
-    <button type="submit" [disabled]="!loginForm.valid" class="btn btn-primary">Submit</button>
-  </form>
-  @if (errorMessage) {
-    <div class="alert alert-danger" role="alert">
-      {{ errorMessage }}
-    </div>
-  }
+        @if (password?.touched && loginForm.get('password')?.errors?.['required']) {
+          <span class="error-text">Parola este obligatorie.</span>
+        }
+      </div>
+
+      <!-- Folosim clasa btn-submit pentru a respecta tematica globală -->
+      <button type="submit" [disabled]="!loginForm.valid" class="btn-submit">Autentificare</button>
+    </form>
+
+    @if (errorMessage) {
+      <div class="error-text" style="text-align: center; margin-top: 1rem; color: #ef4444; font-weight: 600;">
+        {{ errorMessage }}
+      </div>
+    }
+  </div>
 </div>

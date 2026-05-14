@@ -1,0 +1,120 @@
+// Definire variabile de bază pentru consistență vizuală
+$primary-color: #4f46e5;
+$primary-hover: #4338ca;
+$secondary-color: #f3f4f6;
+$text-dark: #1f2937;
+$text-light: #6b7280;
+$border-color: #e5e7eb;
+$danger-color: #ef4444;
+$bg-color: #ffffff;
+$radius-md: 8px;
+$radius-lg: 12px;
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: $secondary-color;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 1rem;
+}
+
+.login-card {
+  background-color: $bg-color;
+  border: 1px solid $border-color;
+  border-radius: $radius-lg;
+  padding: 2.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 420px;
+  animation: slideDown 0.3s ease-out forwards;
+
+  h2 {
+    text-align: center;
+    color: $text-dark;
+    margin-bottom: 2rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-top: 0;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      label {
+        font-weight: 600;
+        color: $text-dark;
+        font-size: 0.875rem;
+      }
+
+      input {
+        padding: 0.75rem;
+        border: 1px solid $border-color;
+        border-radius: $radius-md;
+        font-size: 1rem;
+        color: $text-dark;
+        transition: border-color 0.2s, box-shadow 0.2s;
+
+        &:focus {
+          outline: none;
+          border-color: $primary-color;
+          box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        &.ng-invalid.ng-touched {
+          border-color: $danger-color;
+        }
+      }
+
+      .error-text {
+        color: $danger-color;
+        font-size: 0.75rem;
+        margin-top: -0.25rem;
+      }
+    }
+  }
+
+  .btn-submit {
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: $radius-md;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    width: 100%;
+    margin-top: 0.5rem;
+
+    &:hover:not(:disabled) {
+      background-color: $primary-hover;
+    }
+
+    &:disabled {
+      background-color: #9ca3af;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// Animație pentru apariția formularului
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
