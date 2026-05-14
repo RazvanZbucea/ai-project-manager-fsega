@@ -1,0 +1,32 @@
+// Fallback manual pentru line-clamp, în caz că plugin-ul Tailwind nu este instalat
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Animație subtilă pentru lista de task-uri
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.grid > div {
+  // Aplicăm animația pe fiecare card de task
+  animation: fadeSlideUp 0.5s ease-out forwards;
+  opacity: 0; // Pornește ascuns
+
+  // Stagger effect: adăugăm un delay progresiv pentru a intra pe rând
+  &:nth-child(1) { animation-delay: 0.1s; }
+  &:nth-child(2) { animation-delay: 0.2s; }
+  &:nth-child(3) { animation-delay: 0.3s; }
+  &:nth-child(4) { animation-delay: 0.4s; }
+  &:nth-child(n+5) { animation-delay: 0.5s; }
+}

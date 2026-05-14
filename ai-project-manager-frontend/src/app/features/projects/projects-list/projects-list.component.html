@@ -57,7 +57,11 @@
         </div>
         <div class="card-footer">
           <span class="project-id">#{{ project.id }}</span>
-          <button class="btn-secondary">Vezi Detalii</button>
+          <button
+            [routerLink]="['/projects', project.id]"
+            class="btn-primary">
+            Vezi Detalii
+          </button>
         </div>
       </article>
     } @empty {

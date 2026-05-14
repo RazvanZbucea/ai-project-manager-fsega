@@ -1,14 +1,14 @@
 import {Component, inject} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-// Am modificat calea pentru a reflecta structura curentă
 import {ProjectService} from '../../../core/services/project.service';
 import {toSignal} from '@angular/core/rxjs-interop';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-projects-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './projects-list.component.html',
   styleUrls: ['./projects-list.component.scss']
 })
