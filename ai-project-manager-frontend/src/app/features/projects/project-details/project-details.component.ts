@@ -8,12 +8,12 @@ import {ProjectService} from '../../../core/services/project.service';
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './project-details.component.html',
-  styleUrls: ['./project-details.component.scss'] // Opțional, dacă ai stiluri specifice
+  styleUrls: ['./project-details.component.scss']
 })
 export class ProjectDetailsComponent implements OnInit {
   project: Project | null = null;
   tasks: Task[] = [];
-  isLoading = true;
+  isLoading: boolean = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -22,34 +22,38 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('Sunt în ngOnInit')
     const projectId = Number(this.route.snapshot.paramMap.get('id'));
 
     if (projectId) {
       this.loadProjectDetails(projectId);
       this.loadProjectTasks(projectId);
+    } else {
+      this.isLoading = false;
     }
   }
 
   loadProjectDetails(id: number): void {
     this.projectService.getProjectById(id).subscribe({
-      next: (project) => {
-        this.project = project;
+      next: (projectData) => {
+        this.project = projectData;
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Eroare la încărcarea detaliilor proiectului:', error);
+        this.isLoading = false;
       }
     });
   }
 
   loadProjectTasks(id: number): void {
     this.projectService.getTasksByProjectId(id).subscribe({
-      next: (tasks) => {
-        this.tasks = tasks;
-        this.isLoading = false;
+      next: (taskData) => {
+        console.log('[TaskService] Răspuns primit de la backend:', taskData);
+        this.tasks = taskData;
       },
-      error: (error) => {
-        console.error('Eroare la încărcarea task-urilor proiectului:', error);
-        this.isLoading = false;
+      error: (err) => {
+        console.error('[TaskService] Eroare la preluarea task-urilor:', err);
       }
     });
   }

@@ -9,20 +9,23 @@
     </div>
 
     @if (isLoading) {
-      <div class="text-center text-gray-500 py-10">Se încarcă detaliile...</div>
+      <!-- UI de Loading -->
+      <div class="text-center text-gray-500 py-10 font-medium text-xl">
+        Se încarcă detaliile...
+      </div>
     } @else if (project) {
       <!-- Card Detalii Proiect -->
       <div class="bg-white rounded-xl shadow-md p-6 mb-8 border border-gray-200">
         <div class="flex justify-between items-start mb-4">
           <h1 class="text-3xl font-bold text-gray-900">{{ project.name }}</h1>
-          <span class="px-3 py-1 text-sm font-semibold rounded-full bg-blue-100 text-blue-800">
-
-          </span>
         </div>
         <p class="text-gray-600 text-lg whitespace-pre-line">{{ project.description }}</p>
+        <div class="mt-4 text-sm text-gray-500">
+          Creat de: <strong>{{ project.createdBy }}</strong>
+        </div>
       </div>
 
-      <!-- Secțiune Task-uri -->
+      <!-- Secțiune Header Task-uri -->
       <div class="mb-4 flex justify-between items-center">
         <h2 class="text-2xl font-bold text-gray-800">Task-uri</h2>
         <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow transition-colors">
@@ -30,28 +33,36 @@
         </button>
       </div>
 
-      <!-- Lista de Task-uri -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        @for (task of tasks; track task.id) {
-          <div class="bg-white rounded-lg shadow p-5 border border-gray-100 hover:shadow-lg transition-shadow">
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="text-xl font-bold text-gray-900">{{ task.title }}</h3>
-              <span class="px-2 py-1 text-xs font-semibold rounded bg-gray-100 text-gray-600">
-                {{ task.status }}
-              </span>
+      <!-- Secțiune Listă Task-uri -->
+      <div class="task-section mt-4">
+        <div class="task-list">
+          @for (task of tasks; track task.id) {
+            <!-- Card Individual Task -->
+            <div class="task-card bg-white rounded-lg shadow p-5 border border-gray-100 mb-4 hover:shadow-md transition-shadow">
+              <div class="flex justify-between items-center mb-2">
+                <h3 class="text-xl font-bold text-gray-900">{{ task.title }}</h3>
+                <span class="px-2 py-1 text-xs font-semibold rounded bg-gray-200 text-gray-700">
+                  {{ task.status }}
+                </span>
+              </div>
+              <p class="text-gray-600 mb-2">{{ task.description }}</p>
+              <div class="text-sm text-gray-500 flex justify-between">
+                <small>Asignat lui: <span class="font-semibold">{{ task.assignedName || 'Neasignat' }}</span></small>
+                <small>Creat de: {{ task.createdBy }}</small>
+              </div>
             </div>
-            <p class="text-gray-600 mb-4 line-clamp-3">{{ task.description }}</p>
-            <div class="flex justify-between items-center text-sm text-gray-500">
-              <!-- Aici poți afișa assignee sau alte detalii -->
-              <span>Prioritate: {{ task.assignedName || 'N/A' }}</span>
-              <button class="text-blue-600 hover:text-blue-800 font-semibold">Vezi Task</button>
+          } @empty {
+            <!-- UI pentru Empty State -->
+            <div class="empty-state text-center py-10 bg-white rounded-lg shadow border border-gray-200 text-gray-500">
+              Nu există task-uri pentru acest proiect încă.
             </div>
-          </div>
-        } @empty {
-          <div class="col-span-full text-center py-10 bg-white rounded-lg shadow border border-gray-200 text-gray-500">
-            Nu există task-uri pentru acest proiect încă.
-          </div>
-        }
+          }
+        </div>
+      </div>
+    } @else {
+      <!-- UI în cazul în care ID-ul proiectului nu există -->
+      <div class="text-center text-red-500 py-10 font-bold text-xl">
+        Proiectul nu a fost găsit!
       </div>
     }
   </div>

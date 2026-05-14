@@ -1,32 +1,114 @@
-// Fallback manual pentru line-clamp, în caz că plugin-ul Tailwind nu este instalat
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
+@use "sass:color"; // Adăugăm importul pentru modulul modern de culori SCSS
 
-// Animație subtilă pentru lista de task-uri
-@keyframes fadeSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+.back-link-wrapper {
+  margin-bottom: 1.5rem;
+
+  .back-link {
+    color: #4a90e2; // Culoarea primară din proiectul tău
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover {
+      text-decoration: underline;
+      // Înlocuim vechiul darken() cu funcția nouă color.adjust()
+      color: color.adjust(#4a90e2, $lightness: -15%);
+    }
   }
 }
 
-.grid > div {
-  // Aplicăm animația pe fiecare card de task
-  animation: fadeSlideUp 0.5s ease-out forwards;
-  opacity: 0; // Pornește ascuns
+.project-details-card {
+  margin-bottom: 2.5rem;
 
-  // Stagger effect: adăugăm un delay progresiv pentru a intra pe rând
-  &:nth-child(1) { animation-delay: 0.1s; }
-  &:nth-child(2) { animation-delay: 0.2s; }
-  &:nth-child(3) { animation-delay: 0.3s; }
-  &:nth-child(4) { animation-delay: 0.4s; }
-  &:nth-child(n+5) { animation-delay: 0.5s; }
+  .page-title {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  .description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #444;
+    white-space: pre-line;
+  }
+
+  .meta-info {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e1e4e8;
+    font-size: 0.9rem;
+    color: #666;
+  }
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  .section-title {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #333;
+  }
+}
+
+// Grila pentru cardurile de task-uri
+.task-grid {
+  display: grid;
+  // Creează coloane dinamice: minim 300px lățime, dacă e spațiu se extind proporțional
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+
+  .task-card {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0; // Suprascriem marginea de jos dacă e setată pe clasa globală .card
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+
+      .task-title {
+        margin: 0;
+        font-size: 1.2rem;
+        color: #333;
+      }
+    }
+
+    .task-description {
+      flex-grow: 1; // Împinge footer-ul mereu jos, chiar dacă descrierea e scurtă
+      color: #555;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .task-footer {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: #777;
+      border-top: 1px solid #f0f0f0;
+      padding-top: 0.8rem;
+
+      strong {
+        color: #333;
+      }
+    }
+  }
+}
+
+// Stările de feedback
+.loading-state, .empty-state, .error-state {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.error-state {
+  color: #e74c3c; // Culoarea de eroare din proiectul tău
+  font-weight: bold;
 }
