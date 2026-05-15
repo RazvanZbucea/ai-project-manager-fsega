@@ -15,9 +15,15 @@ export class AuthService {
   }
 
   login(loginRequest: LoginRequest) {
-    return this.http.post<AuthResponse>(this.apiUrl, loginRequest).pipe(tap((response: AuthResponse) => {
-      localStorage.setItem('jwToken', response.token);
-    }));
+    return this.http.post<AuthResponse>(this.apiUrl, loginRequest).pipe(
+      tap((response: AuthResponse) => {
+        // 1. Salvăm întregul obiect (token, username, role) ca string JSON sub cheia 'user'
+        localStorage.setItem('user', JSON.stringify(response));
+
+        // 2. Actualizăm semnalul reactiv! Asta va face Navbar-ul să apară instantaneu.
+        this.currentUser.set(response);
+      })
+    );
   }
 
   isAuthenticated() {
