@@ -1,61 +1,86 @@
-<div class="page-container">
-
-  <!-- Buton Back -->
-  <div class="back-link-wrapper">
-    <a routerLink="/projects" class="back-link">
-      &larr; Înapoi la proiecte
-    </a>
-  </div>
-
-  <!-- Apelăm semnalul cu isLoading() -->
-  @if (isLoading()) {
-    <div class="loading-state">
-      Se încarcă detaliile...
+<div class="project-details-page">
+  <header class="project-details-page__header">
+    <div class="project-details-page__title-group">
+      <button class="btn btn--secondary btn--sm" routerLink="/projects">← Înapoi</button>
+      <h1 class="project-details-page__title">Detalii Proiect</h1>
     </div>
-  } @else if (project()) {
-    <!-- Card Detalii Proiect -->
-    <div class="card project-details-card">
-      <div class="card-header">
-        <h1 class="page-title">{{ project()?.name }}</h1>
-      </div>
-      <p class="description">{{ project()?.description }}</p>
-      <div class="meta-info">
-        Creat de: <strong>{{ project()?.createdBy }}</strong>
-      </div>
+    <div class="project-details-page__actions">
+      <button class="btn btn--primary" (click)="toggleEdit()">
+        {{ isEditing ? 'Anulează' : 'Editează Proiect' }}
+      </button>
     </div>
+  </header>
 
-    <!-- Secțiune Header Task-uri -->
-    <div class="section-header">
-      <h2 class="section-title">Task-uri</h2>
-      <button class="btn-primary">+ Adaugă Task</button>
-    </div>
-
-    <!-- Secțiune Listă Task-uri -->
-    <div class="task-grid">
-      @for (task of tasks(); track task.id) {
-        <div class="card task-card">
-          <div class="task-header">
-            <h3 class="task-title">{{ task.title }}</h3>
-            <span class="badge">{{ task.status }}</span>
+  <main class="project-details-page__content">
+    <section class="details-card">
+      @if (!isEditing) {
+        <div class="details-card__view">
+          <div class="details-card__header">
+            <h2 class="details-card__project-name">{{ project()?.name }}</h2>
+            <span class="badge" [ngClass]="project()?.isDeleted ? 'badge--archived' : 'badge--active'">
+              {{ project()?.isDeleted ? 'Arhivat' : 'Activ' }}
+            </span>
           </div>
-
-          <p class="task-description">{{ task.description }}</p>
-
-          <div class="task-footer">
-            <small>Asignat: <strong>{{ task.assignedName || 'Neasignat' }}</strong></small>
-            <small>Creat de: {{ task.createdBy }}</small>
+          <p class="details-card__description">
+            {{ project()?.description || 'Acest proiect nu are o descriere detaliată.' }}
+          </p>
+          <div class="details-card__meta">
+            <span class="details-card__id">ID Proiect: #{{ project()?.id }}</span>
           </div>
         </div>
-      } @empty {
-        <div class="card empty-state">
-          Nu există task-uri pentru acest proiect încă.
+      } @else {
+        <form [formGroup]="editForm" (ngSubmit)="onUpdate()" class="details-card__form">
+          <div class="details-card__group">
+            <label class="details-card__label">Nume Proiect</label>
+            <input type="text" formControlName="name" class="details-card__input">
+          </div>
+          <div class="details-card__group">
+            <label class="details-card__label">Descriere</label>
+            <textarea formControlName="description" rows="5" class="details-card__input"></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary btn--full-width" [disabled]="editForm.invalid">
+            Salvează Modificările
+          </button>
+        </form>
+      }
+    </section>
+
+    <section class="tasks-section">
+      <div class="tasks-section__header">
+        <h3>Task-uri Proiect</h3>
+        <button class="btn btn--secondary btn--sm">+ Adaugă Task</button>
+      </div>
+
+      @if (tasks().length > 0) {
+        <div class="tasks-section__grid">
+          @for (task of tasks(); track task.id) {
+            <article class="task-card">
+              <div class="task-card__header">
+                <h4 class="task-card__title">{{ task.title }}</h4>
+                <span class="badge badge--active">
+                  {{ task.status }}
+                </span>
+              </div>
+              <p class="task-card__description" [title]="task.description">
+                {{ task.description || 'Fără descriere.' }}
+              </p>
+              <div class="task-card__footer">
+                <span class="task-card__assignee">
+                  👤 {{ task.assignedName ? task.assignedName : 'Neasignat' }}
+                </span>
+                <span class="task-card__date">
+                  📅 {{ task.createdAt | date:'dd MMM yyyy' }}
+                </span>
+              </div>
+            </article>
+          }
+        </div>
+      } @else {
+        <div class="tasks-section__empty">
+          <p>Nu există task-uri asociate. Folosește AI pentru a genera automat task-uri din descrierea proiectului.</p>
+          <button class="btn btn--primary" style="margin-top: 1rem;">✨ Generează cu AI</button>
         </div>
       }
-    </div>
-  } @else {
-    <div class="error-state">
-      Proiectul nu a fost găsit!
-    </div>
-  }
-
+    </section>
+  </main>
 </div>

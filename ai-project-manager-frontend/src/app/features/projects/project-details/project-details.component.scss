@@ -1,153 +1,178 @@
-@use "sass:color"; // Import obligatoriu în Angular 17+ pentru manipularea culorilor
+// src/app/features/projects/project-details/project-details.component.scss
+@use '../../../../styles/variables' as *;
 
-// Containerul principal al paginii
-.page-container {
-  max-width: 1100px;
+.project-details-page {
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 2rem;
-}
+  padding: $spacing-xl;
 
-// Butonul de înapoi
-.back-link-wrapper {
-  margin-bottom: 2rem;
-
-  .back-link {
-    display: inline-flex;
+  &__header {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    color: #4a90e2; // Culoarea ta primară
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 1.05rem;
-    transition: color 0.3s ease;
-
-    &:hover {
-      text-decoration: underline;
-      // Funcția modernă SCSS pentru întunecarea unei culori
-      color: color.adjust(#4a90e2, $lightness: -15%);
-    }
-  }
-}
-
-// Cardul principal cu detaliile proiectului
-.project-details-card {
-  margin-bottom: 3rem;
-
-  .card-header {
-    margin-bottom: 1.2rem;
-
-    .page-title {
-      margin: 0;
-      font-size: 2rem;
-      color: #2c3e50;
-    }
+    margin-bottom: $spacing-xl;
   }
 
-  .description {
-    font-size: 1.1rem;
-    line-height: 1.7;
-    color: #4a5568;
-    white-space: pre-line; // Păstrează enter-urile din baza de date
+  &__title-group {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
   }
 
-  .meta-info {
-    margin-top: 2rem;
-    padding-top: 1rem;
-    border-top: 1px solid #e2e8f0;
-    font-size: 0.95rem;
-    color: #718096;
-  }
-}
-
-// Header-ul secțiunii de task-uri (Titlu + Buton Adaugă)
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-
-  .section-title {
+  &__title {
+    font-size: 1.75rem;
+    color: $color-text-main;
     margin: 0;
-    font-size: 1.5rem;
-    color: #2d3748;
   }
-}
 
-// Grila de afișare a task-urilor (Responsive dinamic)
-.task-grid {
-  display: grid;
-  // Creăm coloane de minim 320px lățime; dacă e spațiu, se pun pe același rând
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1.5rem;
-
-  .task-card {
+  &__content {
     display: flex;
     flex-direction: column;
-    margin-bottom: 0; // Anulează marginea default de la clasa globală .card
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    gap: $spacing-lg;
+  }
+}
 
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
+.details-card {
+  background-color: $color-bg-white;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 
-    .task-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 1rem;
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-md;
+  }
 
-      .task-title {
-        margin: 0;
-        font-size: 1.25rem;
-        color: #2d3748;
-        font-weight: 600;
-      }
-    }
+  &__project-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $color-primary;
+    margin: 0;
+  }
 
-    .task-description {
-      flex-grow: 1; // Împinge footer-ul mereu jos, aliniind perfect toate cardurile
-      color: #4a5568;
-      margin-bottom: 1.5rem;
-      line-height: 1.5;
-    }
+  &__description {
+    color: $color-text-main;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: $spacing-lg;
+    white-space: pre-wrap;
+  }
 
-    .task-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.85rem;
-      color: #718096;
-      border-top: 1px solid #edf2f7;
-      padding-top: 1rem;
+  &__meta {
+    padding-top: $spacing-md;
+    border-top: 1px solid $color-border;
+  }
 
-      strong {
-        color: #2d3748;
-      }
+  &__id {
+    font-size: 0.85rem;
+    color: $color-text-muted;
+    font-weight: 600;
+  }
+
+  // Stiluri Formular
+  &__group {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-md;
+  }
+
+  &__label {
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  &__input {
+    padding: 0.75rem;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    font-size: 1rem;
+    font-family: inherit;
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
     }
   }
 }
 
-// Stările UI (Loading, Empty, Error)
-.loading-state, .empty-state, .error-state {
+.tasks-section {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-md;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: $spacing-md;
+  }
+
+  &__empty {
+    padding: $spacing-xl;
+    background-color: $color-bg-light;
+    border: 2px dashed $color-border;
+    border-radius: $radius-lg;
+    text-align: center;
+    color: $color-text-muted;
+  }
+}
+
+// Block separat pentru Task Card
+.task-card {
+  background-color: $color-bg-white;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  padding: $spacing-md;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 4rem 2rem;
-  text-align: center;
-  color: #718096;
-  font-size: 1.2rem;
-  font-weight: 500;
-  background-color: #f7fafc;
-  border-radius: 8px;
-  border: 1px dashed #cbd5e0;
-}
+  flex-direction: column;
+  gap: $spacing-sm;
+  transition: transform 0.2s, box-shadow 0.2s;
 
-.error-state {
-  color: #e53e3e;
-  background-color: #fff5f5;
-  border-color: #feb2b2;
-}
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  }
 
-.empty-state {
-  grid-column: 1 / -1; // Face ca acest card să ocupe tot lățimea grilei
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: $spacing-sm;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.05rem;
+    color: $color-text-main;
+    font-weight: 600;
+  }
+
+  &__description {
+    color: $color-text-muted;
+    font-size: 0.9rem;
+    margin: 0;
+    line-height: 1.4;
+    // Tăiem textul dacă e prea lung (max 2 rânduri)
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__footer {
+    margin-top: auto; // Împinge footer-ul mereu jos
+    padding-top: $spacing-sm;
+    border-top: 1px solid $color-border;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: $color-text-muted;
+  }
 }

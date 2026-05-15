@@ -24,4 +24,8 @@ export class ProjectService {
   getTasksByProjectId(projectId: number): Observable<Task[]> {
     return this.http.get<Task[]>(`${this.apiUrl}/${projectId}/tasks`);
   }
+
+  updateProject(id: number, project: ProjectUpdate): Observable<Project> {
+    return this.http.put<Project>(`${this.apiUrl}/${id}`, project);
+  }
 }

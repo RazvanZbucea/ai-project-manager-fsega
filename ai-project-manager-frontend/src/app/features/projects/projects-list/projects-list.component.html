@@ -1,74 +1,80 @@
-<div class="projects-container">
-  <header class="projects-header">
-    <h1>Proiectele Mele</h1>
-    <button class="btn-primary" (click)="toggleForm()">
+<div class="projects-page">
+  <header class="projects-page__header">
+    <h1 class="projects-page__title">Proiectele Mele</h1>
+    <button class="btn btn--primary" (click)="toggleForm()">
       {{ isCreatingProject ? 'Anulează' : '+ Proiect Nou' }}
     </button>
   </header>
 
-  <!-- Secțiunea formularului (Inline Form) -->
   @if (isCreatingProject) {
-    <section class="create-project-section">
-      <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="project-form">
-        <div class="form-group">
-          <label for="name">Nume Proiect <span class="required">*</span></label>
+    <section class="project-form-card">
+      <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="project-form-card__form">
+        <div class="project-form-card__group">
+          <label for="name" class="project-form-card__label">
+            Nume Proiect <span class="project-form-card__label--required">*</span>
+          </label>
           <input
             type="text"
             id="name"
             formControlName="name"
             placeholder="Introduceți numele proiectului"
-            [class.invalid]="projectForm.get('name')?.invalid && projectForm.get('name')?.touched"
+            class="project-form-card__input"
+            [class.project-form-card__input--invalid]="projectForm.get('name')?.invalid && projectForm.get('name')?.touched"
           >
           @if (projectForm.get('name')?.invalid && projectForm.get('name')?.touched) {
-            <span class="error-msg">Numele este obligatoriu (minim 3 caractere).</span>
+            <span class="project-form-card__error">Numele este obligatoriu (minim 3 caractere).</span>
           }
         </div>
 
-        <div class="form-group">
-          <label for="description">Descriere</label>
+        <div class="project-form-card__group">
+          <label for="description" class="project-form-card__label">Descriere</label>
           <textarea
             id="description"
             formControlName="description"
             placeholder="Introduceți descrierea proiectului"
             rows="3"
+            class="project-form-card__input"
           ></textarea>
         </div>
 
-        <div class="form-actions">
-          <button type="submit" class="btn-submit" [disabled]="projectForm.invalid">Creează Proiectul</button>
+        <div class="project-form-card__actions">
+          <button type="submit" class="btn btn--primary btn--full-width" [disabled]="projectForm.invalid">
+            Creează Proiectul
+          </button>
         </div>
       </form>
     </section>
   }
 
-  <!-- Grila cu proiecte -->
-  <main class="projects-grid">
+  <main class="projects-page__grid">
     @for (project of projects(); track project.id) {
       <article class="project-card">
-        <div class="card-header">
-          <h2>{{ project.name }}</h2>
-          <span class="status-badge"
-                [ngClass]="project.isDeleted ? 'archived' : 'active'">{{ project.isDeleted ? 'Arhivat' : 'Activ' }}</span>
+        <div class="project-card__header">
+          <h2 class="project-card__title">{{ project.name }}</h2>
+          <span class="badge"
+                [ngClass]="project.isDeleted ? 'badge--archived' : 'badge--active'">
+            {{ project.isDeleted ? 'Arhivat' : 'Activ' }}
+          </span>
         </div>
-        <div class="card-body">
-          <p class="description">
+        <div class="project-card__body">
+          <p class="project-card__description">
             {{ project.description ? project.description : 'Fără descriere.' }}
           </p>
         </div>
-        <div class="card-footer">
-          <span class="project-id">#{{ project.id }}</span>
+        <div class="project-card__footer">
+          <span class="project-card__id">#{{ project.id }}</span>
           <button
             [routerLink]="['/projects', project.id]"
-            class="btn-primary">
+            class="btn btn--secondary">
             Vezi Detalii
           </button>
         </div>
       </article>
     } @empty {
-      <div class="empty-state">
-        <div class="empty-icon">📁</div>
+      <div class="projects-page__empty">
+        <div class="projects-page__empty-icon">📁</div>
         <h3>Niciun proiect găsit</h3>
-        <p>Apasă pe "+ Proiect Nou" pentru a începe.</p>
+        <p class="projects-page__empty-text">Apasă pe "+ Proiect Nou" pentru a începe.</p>
       </div>
     }
   </main>
