@@ -44,7 +44,7 @@ public class TaskController {
     }
 
     @PostMapping("/{taskId}/comments")
-    public ResponseEntity<CommentDTO> createComment(@PathVariable Long taskId, @RequestBody CommentCreateDTO commentDTO, Principal principal) {
+    public ResponseEntity<CommentDTO> createComment(@PathVariable Long taskId, @Valid @RequestBody CommentCreateDTO commentDTO, Principal principal) {
         return new ResponseEntity<>(commentService.createComment(taskId, commentDTO, principal.getName()), HttpStatus.CREATED);
     }
 

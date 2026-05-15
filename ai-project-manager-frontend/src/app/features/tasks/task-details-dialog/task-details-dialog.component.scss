@@ -1,0 +1,215 @@
+.dialog-container {
+  background: #fff;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 650px;
+  max-height: 90vh; // Prevenim ieșirea din ecran
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  background-color: #fafbfc;
+  border-bottom: 1px solid #dfe1e6;
+
+  .header-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .dialog-title {
+      margin: 0;
+      font-size: 1.25rem;
+      color: #172b4d;
+    }
+  }
+
+  .btn-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #5e6c84;
+    cursor: pointer;
+    transition: color 0.2s;
+    &:hover { color: #de350b; }
+  }
+}
+
+.dialog-content {
+  padding: 1.5rem;
+  overflow-y: auto; // Permite scroll doar în interior dacă e prea lung conținutul
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+// --- FORMULAR EDITARE ---
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #5e6c84;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      .required { color: #de350b; }
+    }
+
+    input, textarea, select {
+      padding: 0.6rem;
+      border: 2px solid #dfe1e6;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: border-color 0.2s;
+
+      &:focus {
+        outline: none;
+        border-color: #4c9aff;
+      }
+    }
+
+    // Stil specific când un developer nu are voie să editeze
+    .readonly-input {
+      background-color: #f4f5f7;
+      border-color: transparent;
+      color: #172b4d;
+      cursor: not-allowed;
+      &:focus { border-color: transparent; }
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+  }
+}
+
+.divider {
+  border: 0;
+  height: 1px;
+  background: #dfe1e6;
+  margin: 0;
+}
+
+// --- ZONA COMENTARII ---
+.comments-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  .comments-title {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #172b4d;
+    font-weight: 600;
+  }
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-height: 250px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+
+  .no-comments {
+    color: #5e6c84;
+    font-style: italic;
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .comment-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+
+    .comment-avatar {
+      width: 32px;
+      height: 32px;
+      background-color: #0052cc;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .comment-body {
+      background: #f4f5f7;
+      padding: 0.75rem 1rem;
+      border-radius: 0 8px 8px 8px;
+      flex: 1;
+
+      .comment-meta {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.4rem;
+
+        .author {
+          font-weight: 600;
+          color: #172b4d;
+          font-size: 0.85rem;
+        }
+        .date {
+          font-size: 0.75rem;
+          color: #5e6c84;
+        }
+      }
+
+      .comment-content {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #172b4d;
+        line-height: 1.4;
+        white-space: pre-wrap; // Păstrează enter-urile din textarea
+      }
+    }
+  }
+}
+
+.comment-form {
+  margin-top: 0.5rem;
+
+  .comment-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-end;
+
+    textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #dfe1e6;
+      border-radius: 6px;
+      resize: vertical;
+      font-family: inherit;
+      transition: border-color 0.2s;
+
+      &:focus {
+        outline: none;
+        border-color: #4c9aff;
+      }
+    }
+  }
+}

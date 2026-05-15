@@ -11,7 +11,7 @@ export class CommentService {
     return this.httpClient.get<Comment[]>(`${this.apiUrl}/${taskId}/comments`);
   }
 
-  createComment(taskId: number, content: string): Observable<Comment> {
-    return this.httpClient.post<Comment>(`${this.apiUrl}/${taskId}/comments`, {content});
+  createComment(taskId: number, text: string): Observable<Comment> {
+    return this.httpClient.post<Comment>(`${this.apiUrl}/${taskId}/comments`, {text});
   }
 }
