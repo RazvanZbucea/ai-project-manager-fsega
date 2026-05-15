@@ -7,6 +7,8 @@ import {ProjectService} from '../../../core/services/project.service';
 import {TaskService} from '../../../core/services/task.service';
 import {Dialog, DialogModule} from '@angular/cdk/dialog';
 import {TaskCreateDialogComponent} from '../../tasks/task-create-dialog/task-create-dialog.component';
+import {TaskDetailsDialogComponent} from '../../tasks/task-details-dialog/task-details-dialog.component';
+import {AuthService} from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-project-details',
@@ -34,6 +36,7 @@ export class ProjectDetailsComponent implements OnInit {
   private taskService = inject(TaskService);
   private fb = inject(FormBuilder);
   private dialog = inject(Dialog);
+  private authService = inject(AuthService);
 
   editForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
@@ -118,11 +121,19 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   private updateColumnSignal(status: string, data: Task[]): void {
-    switch(status) {
-      case 'TO_DO': this.todoTasks.set(data); break;
-      case 'IN_PROGRESS': this.inProgressTasks.set(data); break;
-      case 'TESTING': this.testingTasks.set(data); break;
-      case 'DONE': this.doneTasks.set(data); break;
+    switch (status) {
+      case 'TO_DO':
+        this.todoTasks.set(data);
+        break;
+      case 'IN_PROGRESS':
+        this.inProgressTasks.set(data);
+        break;
+      case 'TESTING':
+        this.testingTasks.set(data);
+        break;
+      case 'DONE':
+        this.doneTasks.set(data);
+        break;
     }
   }
 
@@ -164,7 +175,7 @@ export class ProjectDetailsComponent implements OnInit {
     if (!currentProject) return;
 
     const dialogRef = this.dialog.open(TaskCreateDialogComponent, {
-      data: { projectId: currentProject.id },
+      data: {projectId: currentProject.id},
       width: '500px',
       backdropClass: 'cdk-overlay-dark-backdrop',
       disableClose: true // Împiedică închiderea accidentală dând click în afara ferestrei
@@ -178,6 +189,24 @@ export class ProjectDetailsComponent implements OnInit {
         this.todoTasks.update(tasks => [...tasks, newTask]);
         this.totalTasksCount.update(count => count + 1);
       }
+    });
+  }
+
+  openTaskDetails(task: Task) {
+    const user = this.authService.currentUser();
+    const currentProject = this.project();
+
+    // E manager dacă e Admin SAU dacă username-ul lui se potrivește cu createdBy din proiect
+    const isManager = user?.role === 'ADMIN' || currentProject?.createdBy === user?.username;
+
+    const dialogRef = this.dialog.open(TaskDetailsDialogComponent, {
+      data: { task, projectId: currentProject?.id, isManager }, // Trimitem direct isManager
+      width: '600px',
+      backdropClass: 'cdk-overlay-dark-backdrop'
+    });
+
+    dialogRef.closed.subscribe(result => {
+      if (result) this.loadProjectTasks(currentProject!.id);
     });
   }
 }

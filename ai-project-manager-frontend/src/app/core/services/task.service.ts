@@ -16,4 +16,8 @@ export class TaskService {
   createTask(projectId: number, taskData: TaskCreate): Observable<Task> {
     return this.httpClient.post<Task>(`http://localhost:8089/api/projects/${projectId}/tasks`, taskData);
   }
+
+  updateTask(id: number, task: TaskUpdate): Observable<Task> {
+    return this.httpClient.put<Task>(`${this.apiUrl}/${id}`, task);
+  }
 }
