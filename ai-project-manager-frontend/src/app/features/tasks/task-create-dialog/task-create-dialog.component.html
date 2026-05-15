@@ -1,0 +1,38 @@
+<div class="dialog-container">
+  <header class="dialog-header">
+    <h2 class="dialog-title">Creare Task Nou</h2>
+    <button class="btn-close" (click)="closeDialog()">✖</button>
+  </header>
+
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="dialog-form">
+    <div class="form-group">
+      <label>Titlu Task <span class="required">*</span></label>
+      <input type="text" formControlName="title" placeholder="Ex: Creare componentă login..." autofocus>
+      @if (taskForm.get('title')?.touched && taskForm.get('title')?.hasError('required')) {
+        <small class="error-text">Titlul este obligatoriu.</small>
+      }
+    </div>
+
+    <div class="form-group">
+      <label>Descriere</label>
+      <textarea formControlName="description" rows="4" placeholder="Detalii despre task..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Asignat Către</label>
+      <select formControlName="assignedName">
+        <option value="">-- Neasignat --</option>
+        @for (user of users(); track user.id) {
+          <option [value]="user.username">{{ user.username }} {{ user.firstName ? '(' + user.firstName + ' ' + user.lastName + ')' : '' }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="dialog-footer">
+      <button type="button" class="btn btn--secondary" (click)="closeDialog()">Anulează</button>
+      <button type="submit" class="btn btn--primary" [disabled]="taskForm.invalid || isSubmitting()">
+        {{ isSubmitting() ? 'Se creează...' : 'Creează Task' }}
+      </button>
+    </div>
+  </form>
+</div>

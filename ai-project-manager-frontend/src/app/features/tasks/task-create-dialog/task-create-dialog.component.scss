@@ -1,0 +1,78 @@
+.dialog-container {
+  background: #fff;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #dfe1e6;
+
+  .dialog-title {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #172b4d;
+  }
+
+  .btn-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #5e6c84;
+    cursor: pointer;
+    transition: color 0.2s;
+    &:hover { color: #de350b; }
+  }
+}
+
+.dialog-form {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #172b4d;
+      .required { color: #de350b; }
+    }
+
+    input, textarea, select {
+      padding: 0.6rem;
+      border: 2px solid #dfe1e6;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+
+      &:focus {
+        outline: none;
+        border-color: #4c9aff; // Culoare de focus Jira
+      }
+    }
+
+    .error-text {
+      color: #de350b;
+      font-size: 0.8rem;
+    }
+  }
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 1rem;
+}

@@ -43,7 +43,7 @@
     <section class="tasks-section">
       <div class="tasks-section__header">
         <h3>Kanban Board</h3>
-        <button class="btn btn--secondary btn--sm">+ Adaugă Task</button>
+        <button class="btn btn--secondary btn--sm" (click)="openCreateTaskDialog()">+ Adaugă Task</button>
       </div>
 
       @if (totalTasksCount() > 0) {

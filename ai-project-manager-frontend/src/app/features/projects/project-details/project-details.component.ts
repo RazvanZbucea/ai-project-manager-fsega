@@ -5,11 +5,13 @@ import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {ProjectService} from '../../../core/services/project.service';
 import {TaskService} from '../../../core/services/task.service';
+import {Dialog, DialogModule} from '@angular/cdk/dialog';
+import {TaskCreateDialogComponent} from '../../tasks/task-create-dialog/task-create-dialog.component';
 
 @Component({
   selector: 'app-project-details',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule, DragDropModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, DragDropModule, DialogModule],
   templateUrl: './project-details.component.html',
   styleUrls: ['./project-details.component.scss']
 })
@@ -31,6 +33,7 @@ export class ProjectDetailsComponent implements OnInit {
   private projectService = inject(ProjectService);
   private taskService = inject(TaskService);
   private fb = inject(FormBuilder);
+  private dialog = inject(Dialog);
 
   editForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
@@ -154,5 +157,27 @@ export class ProjectDetailsComponent implements OnInit {
         error: (err) => console.error('Eroare la actualizarea proiectului:', err)
       });
     }
+  }
+
+  openCreateTaskDialog(): void {
+    const currentProject = this.project();
+    if (!currentProject) return;
+
+    const dialogRef = this.dialog.open(TaskCreateDialogComponent, {
+      data: { projectId: currentProject.id },
+      width: '500px',
+      backdropClass: 'cdk-overlay-dark-backdrop',
+      disableClose: true // Împiedică închiderea accidentală dând click în afara ferestrei
+    });
+
+    // Ascultăm când se închide fereastra
+    dialogRef.closed.subscribe((newTask: any) => {
+      if (newTask) {
+        // ACTUALIZARE OPTIMISTĂ CU SIGNALS - Nu facem alt request HTTP!
+        // Task-ul nou creat merge implicit în "TO DO"
+        this.todoTasks.update(tasks => [...tasks, newTask]);
+        this.totalTasksCount.update(count => count + 1);
+      }
+    });
   }
 }

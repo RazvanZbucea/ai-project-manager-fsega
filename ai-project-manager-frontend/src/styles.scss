@@ -81,4 +81,6 @@ body {
     background-color: $color-border;
     color: $color-text-muted;
   }
+
+  .cdk-overlay-dark-backdrop { background: rgba(9, 30, 66, 0.54); }
 }
