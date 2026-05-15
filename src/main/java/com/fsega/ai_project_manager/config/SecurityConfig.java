@@ -73,7 +73,7 @@ public class SecurityConfig {
         // Permitem explicit originea frontend-ului
         configuration.setAllowedOrigins(List.of("http://localhost:4200"));
         // Permitem metodele HTTP necesare
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         // Permitem headerele de care avem nevoie (mai ales Authorization pentru JWT)
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
 

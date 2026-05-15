@@ -1,9 +1,6 @@
 package com.fsega.ai_project_manager.controller;
 
-import com.fsega.ai_project_manager.controller.dto.CommentCreateDTO;
-import com.fsega.ai_project_manager.controller.dto.CommentDTO;
-import com.fsega.ai_project_manager.controller.dto.TaskDTO;
-import com.fsega.ai_project_manager.controller.dto.TaskUpdateDTO;
+import com.fsega.ai_project_manager.controller.dto.*;
 import com.fsega.ai_project_manager.service.CommentService;
 import com.fsega.ai_project_manager.service.TaskService;
 import jakarta.validation.Valid;
@@ -49,5 +46,11 @@ public class TaskController {
     @PostMapping("/{taskId}/comments")
     public ResponseEntity<CommentDTO> createComment(@PathVariable Long taskId, @RequestBody CommentCreateDTO commentDTO, Principal principal) {
         return new ResponseEntity<>(commentService.createComment(taskId, commentDTO, principal.getName()), HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or @taskService.isAssignee(#id, authentication.name) or @projectService.isProjectOwner(#id, authentication.name)")
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<TaskDTO> updateTaskStatus(@PathVariable Long id, @Valid @RequestBody TaskStatusUpdateDTO statusDTO) {
+        return ResponseEntity.ok(taskService.updateTaskStatus(id, statusDTO));
     }
 }

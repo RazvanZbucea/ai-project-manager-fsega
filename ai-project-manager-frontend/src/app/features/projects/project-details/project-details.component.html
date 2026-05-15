@@ -24,9 +24,6 @@
           <p class="details-card__description">
             {{ project()?.description || 'Acest proiect nu are o descriere detaliată.' }}
           </p>
-          <div class="details-card__meta">
-            <span class="details-card__id">ID Proiect: #{{ project()?.id }}</span>
-          </div>
         </div>
       } @else {
         <form [formGroup]="editForm" (ngSubmit)="onUpdate()" class="details-card__form">
@@ -38,44 +35,111 @@
             <label class="details-card__label">Descriere</label>
             <textarea formControlName="description" rows="5" class="details-card__input"></textarea>
           </div>
-          <button type="submit" class="btn btn--primary btn--full-width" [disabled]="editForm.invalid">
-            Salvează Modificările
-          </button>
+          <button type="submit" class="btn btn--primary" [disabled]="editForm.invalid">Salvează Modificările</button>
         </form>
       }
     </section>
 
     <section class="tasks-section">
       <div class="tasks-section__header">
-        <h3>Task-uri Proiect</h3>
+        <h3>Kanban Board</h3>
         <button class="btn btn--secondary btn--sm">+ Adaugă Task</button>
       </div>
 
-      @if (tasks().length > 0) {
-        <div class="tasks-section__grid">
-          @for (task of tasks(); track task.id) {
-            <article class="task-card">
-              <div class="task-card__header">
-                <h4 class="task-card__title">{{ task.title }}</h4>
-                <span class="badge badge--active">
-                  {{ task.status }}
-                </span>
-              </div>
-              <p class="task-card__description" [title]="task.description">
-                {{ task.description || 'Fără descriere.' }}
-              </p>
-              <div class="task-card__footer">
-                <span class="task-card__assignee">
-                  👤 {{ task.assignedName ? task.assignedName : 'Neasignat' }}
-                </span>
-                <span class="task-card__date">
-                  📅 {{ task.createdAt | date:'dd MMM yyyy' }}
-                </span>
-              </div>
-            </article>
-          }
-        </div>
-      } @else {
+      @if (totalTasksCount() > 0) {
+
+        <div class="kanban-board" cdkDropListGroup>
+
+          <div class="kanban-column">
+            <div class="kanban-column__header">
+              <h4>To Do <span class="count">{{todoTasks().length}}</span></h4>
+            </div>
+            <div class="kanban-list"
+                 id="TO_DO"
+                 cdkDropList
+                 [cdkDropListData]="todoTasks()"
+                 (cdkDropListDropped)="drop($event, 'TO_DO')">
+
+              @for (task of todoTasks(); track task.id) {
+                <article class="task-card" cdkDrag>
+                  <div class="task-card__custom-placeholder" *cdkDragPlaceholder></div>
+
+                  <div class="task-card__header">
+                    <h5 class="task-card__title">{{ task.title }}</h5>
+                  </div>
+                  <p class="task-card__description" [title]="task.description">{{ task.description || 'Fără descriere.' }}</p>
+                  <div class="task-card__footer">
+                    <span class="task-card__assignee">👤 {{ task.assignedName ? task.assignedName : 'Neasignat' }}</span>
+                  </div>
+                </article>
+              }
+            </div>
+          </div>
+
+          <div class="kanban-column">
+            <div class="kanban-column__header">
+              <h4>In Progress <span class="count">{{inProgressTasks().length}}</span></h4>
+            </div>
+            <div class="kanban-list"
+                 id="IN_PROGRESS"
+                 cdkDropList
+                 [cdkDropListData]="inProgressTasks()"
+                 (cdkDropListDropped)="drop($event, 'IN_PROGRESS')">
+
+              @for (task of inProgressTasks(); track task.id) {
+                <article class="task-card" cdkDrag>
+                  <div class="task-card__custom-placeholder" *cdkDragPlaceholder></div>
+                  <div class="task-card__header"><h5 class="task-card__title">{{ task.title }}</h5></div>
+                  <p class="task-card__description">{{ task.description || 'Fără descriere.' }}</p>
+                  <div class="task-card__footer"><span class="task-card__assignee">👤 {{ task.assignedName }}</span></div>
+                </article>
+              }
+            </div>
+          </div>
+
+          <div class="kanban-column">
+            <div class="kanban-column__header">
+              <h4>Testing <span class="count">{{testingTasks().length}}</span></h4>
+            </div>
+            <div class="kanban-list"
+                 id="TESTING"
+                 cdkDropList
+                 [cdkDropListData]="testingTasks()"
+                 (cdkDropListDropped)="drop($event, 'TESTING')">
+
+              @for (task of testingTasks(); track task.id) {
+                <article class="task-card" cdkDrag>
+                  <div class="task-card__custom-placeholder" *cdkDragPlaceholder></div>
+                  <div class="task-card__header"><h5 class="task-card__title">{{ task.title }}</h5></div>
+                  <p class="task-card__description">{{ task.description || 'Fără descriere.' }}</p>
+                  <div class="task-card__footer"><span class="task-card__assignee">👤 {{ task.assignedName }}</span></div>
+                </article>
+              }
+            </div>
+          </div>
+
+          <div class="kanban-column">
+            <div class="kanban-column__header">
+              <h4>Done <span class="count">{{doneTasks().length}}</span></h4>
+            </div>
+            <div class="kanban-list"
+                 id="DONE"
+                 cdkDropList
+                 [cdkDropListData]="doneTasks()"
+                 (cdkDropListDropped)="drop($event, 'DONE')">
+
+              @for (task of doneTasks(); track task.id) {
+                <article class="task-card" cdkDrag>
+                  <div class="task-card__custom-placeholder" *cdkDragPlaceholder></div>
+                  <div class="task-card__header"><h5 class="task-card__title">{{ task.title }}</h5></div>
+                  <p class="task-card__description">{{ task.description || 'Fără descriere.' }}</p>
+                  <div class="task-card__footer"><span class="task-card__assignee">👤 {{ task.assignedName }}</span></div>
+                </article>
+              }
+            </div>
+          </div>
+
+        </div> } @else {
         <div class="tasks-section__empty">
           <p>Nu există task-uri asociate. Folosește AI pentru a genera automat task-uri din descrierea proiectului.</p>
           <button class="btn btn--primary" style="margin-top: 1rem;">✨ Generează cu AI</button>

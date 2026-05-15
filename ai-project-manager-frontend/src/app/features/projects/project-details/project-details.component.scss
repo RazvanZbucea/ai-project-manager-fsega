@@ -1,178 +1,246 @@
-// src/app/features/projects/project-details/project-details.component.scss
-@use '../../../../styles/variables' as *;
+// Culori specifice pentru board
+$kanban-bg: #f4f5f7; // Fundalul coloanelor
+$card-bg: #ffffff;
+$text-main: #172b4d;
+$text-muted: #5e6c84;
+$shadow-sm: 0 1px 2px rgba(9, 30, 66, 0.25);
+$shadow-md: 0 4px 8px rgba(9, 30, 66, 0.15);
+$shadow-drag: 0 8px 16px rgba(9, 30, 66, 0.25);
 
+// --- LAYOUT PAGINĂ GENERALĂ ---
 .project-details-page {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: $spacing-xl;
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto; // Centrează conținutul pe ecrane foarte mari
+  min-height: 100vh;
+  background-color: #fafbfc; // Un gri foarte deschis (stil Jira) pentru contrast cu cardurile
 
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: $spacing-xl;
+    margin-bottom: 2rem;
   }
 
   &__title-group {
     display: flex;
     align-items: center;
-    gap: $spacing-md;
+    gap: 1rem;
   }
 
   &__title {
-    font-size: 1.75rem;
-    color: $color-text-main;
     margin: 0;
-  }
-
-  &__content {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-lg;
+    font-size: 1.75rem;
+    color: #172b4d;
+    font-weight: 600;
   }
 }
 
+// --- CARD DETALII PROIECT ---
 .details-card {
-  background-color: $color-bg-white;
-  border: 1px solid $color-border;
-  border-radius: $radius-lg;
-  padding: $spacing-xl;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(9, 30, 66, 0.1); // Umbră subtilă
+  margin-bottom: 2.5rem; // Spațiu generos între detalii și Kanban
+  border: 1px solid #dfe1e6;
 
   &__header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: $spacing-md;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
   }
 
   &__project-name {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: $color-primary;
     margin: 0;
+    font-size: 1.25rem;
+    color: #091e42;
+    font-weight: 600;
   }
 
   &__description {
-    color: $color-text-main;
-    font-size: 1.1rem;
-    line-height: 1.7;
-    margin-bottom: $spacing-lg;
-    white-space: pre-wrap;
-  }
-
-  &__meta {
-    padding-top: $spacing-md;
-    border-top: 1px solid $color-border;
-  }
-
-  &__id {
-    font-size: 0.85rem;
-    color: $color-text-muted;
-    font-weight: 600;
-  }
-
-  // Stiluri Formular
-  &__group {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-sm;
-    margin-bottom: $spacing-md;
-  }
-
-  &__label {
-    font-weight: 600;
-    font-size: 0.875rem;
-  }
-
-  &__input {
-    padding: 0.75rem;
-    border: 1px solid $color-border;
-    border-radius: $radius-md;
-    font-size: 1rem;
-    font-family: inherit;
-
-    &:focus {
-      outline: none;
-      border-color: $color-primary;
-      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-    }
+    color: #5e6c84;
+    line-height: 1.6;
+    margin: 0;
+    font-size: 0.95rem;
   }
 }
 
+// --- ANTET SECȚIUNE TASK-URI ---
 .tasks-section {
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: $spacing-md;
-  }
+    margin-bottom: 1.5rem;
 
-  &__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: $spacing-md;
-  }
-
-  &__empty {
-    padding: $spacing-xl;
-    background-color: $color-bg-light;
-    border: 2px dashed $color-border;
-    border-radius: $radius-lg;
-    text-align: center;
-    color: $color-text-muted;
+    h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      color: #172b4d;
+    }
   }
 }
 
-// Block separat pentru Task Card
-.task-card {
-  background-color: $color-bg-white;
-  border: 1px solid $color-border;
-  border-radius: $radius-md;
-  padding: $spacing-md;
+// --- KANBAN BOARD CONTAINER ---
+.kanban-board {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  overflow-x: auto; // Permite scroll orizontal dacă sunt prea multe coloane sau ecranul e mic
+  padding-bottom: 1rem;
+  min-height: 60vh;
+}
+
+// --- KANBAN COLUMN ---
+.kanban-column {
+  flex: 1;
+  min-width: 280px;
+  max-width: 350px; // Previne lățirea exagerată pe ecrane mari
+  background-color: $kanban-bg;
+  border-radius: 8px;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: $spacing-sm;
-  transition: transform 0.2s, box-shadow 0.2s;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid transparent; // spațiu vizual
+
+    h4 {
+      margin: 0;
+      font-size: 1rem;
+      color: $text-main;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+
+      .count {
+        background: #dfe1e6;
+        color: $text-main;
+        border-radius: 12px;
+        padding: 0.1rem 0.6rem;
+        font-size: 0.75rem;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+// --- KANBAN LIST (Zona de drop) ---
+.kanban-list {
+  min-height: 100px; // OBLIGATORIU: Permite drop-ul chiar dacă lista este goală
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+
+  // Când tragi un element deasupra unei liste valide, o putem evidenția subtil
+  &.cdk-drop-list-receiving {
+    background-color: rgba(9, 30, 66, 0.05);
+  }
+}
+
+// --- TASK CARD ---
+.task-card {
+  background: $card-bg;
+  border-radius: 6px;
+  padding: 1rem;
+  box-shadow: $shadow-sm;
+  cursor: grab; // Indică vizual că elementul poate fi tras
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    box-shadow: $shadow-md;
+  }
+
+  &:active {
+    cursor: grabbing; // Se schimbă cursorul în timpul tragerii
   }
 
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: $spacing-sm;
   }
 
   &__title {
     margin: 0;
-    font-size: 1.05rem;
-    color: $color-text-main;
-    font-weight: 600;
+    font-size: 0.95rem;
+    color: $text-main;
+    font-weight: 500;
+    line-height: 1.4;
   }
 
   &__description {
-    color: $color-text-muted;
-    font-size: 0.9rem;
     margin: 0;
-    line-height: 1.4;
-    // Tăiem textul dacă e prea lung (max 2 rânduri)
+    font-size: 0.85rem;
+    color: $text-muted;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 2; // Taie textul după 2 rânduri cu "..."
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
 
   &__footer {
-    margin-top: auto; // Împinge footer-ul mereu jos
-    padding-top: $spacing-sm;
-    border-top: 1px solid $color-border;
     display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    color: $color-text-muted;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #f4f5f7;
+
+    .task-card__assignee {
+      font-size: 0.8rem;
+      color: $text-muted;
+      background: #ebecf0;
+      padding: 0.2rem 0.5rem;
+      border-radius: 12px;
+    }
   }
+
+  // --- PLACEHOLDER ---
+  // Acesta este elementul fals care face loc în listă în timp ce tragi cardul real
+  &__custom-placeholder {
+    background: rgba(9, 30, 66, 0.04);
+    border: 2px dashed rgba(9, 30, 66, 0.2);
+    min-height: 100px;
+    border-radius: 6px;
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+// --- ANGULAR CDK DRAG & DROP ANIMATIONS (CRITIC PENTRU UX) ---
+
+// Clasa aplicată elementului în timp ce este "în zbor" (atașat de cursor)
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 6px;
+  box-shadow: $shadow-drag; // Umbră mult mai pronunțată pentru efectul de plutire
+  opacity: 0.95; // Ușor transparent
+  background: white; // Previne pierderea culorii de fundal
+  padding: 1rem;
+}
+
+// Animația aplicată când un element este lăsat din mână și se duce la locul lui
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+// Face ca celelalte elemente din listă să se dea la o parte lin când faci hover cu un card peste ele
+.kanban-list.cdk-drop-list-dragging .task-card:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }

@@ -2,6 +2,7 @@ package com.fsega.ai_project_manager.service;
 
 import com.fsega.ai_project_manager.controller.dto.TaskCreateDTO;
 import com.fsega.ai_project_manager.controller.dto.TaskDTO;
+import com.fsega.ai_project_manager.controller.dto.TaskStatusUpdateDTO;
 import com.fsega.ai_project_manager.controller.dto.TaskUpdateDTO;
 import com.fsega.ai_project_manager.model.Project;
 import com.fsega.ai_project_manager.model.Task;
@@ -109,6 +110,32 @@ public class TaskService {
             taskDTOs.add(convertToDTO(taskRepository.save(task)));
         }
         return taskDTOs;
+    }
+
+    @Transactional
+    public TaskDTO updateTaskStatus(Long id, TaskStatusUpdateDTO statusDTO) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Task not found with id: " + id));
+
+        Status currentStatus = task.getStatus();
+        Status newStatus = Status.valueOf(statusDTO.status());
+
+        // JAVA 17: Switch Expressions (mai curate decat switch-ul cu block-uri break din Java 8)
+        // Validam tranzitiile pentru a nu sari pasi ilogici. Returneaza boolean direct.
+        boolean isValidTransition = switch (currentStatus) {
+            case TO_DO -> newStatus == Status.IN_PROGRESS;
+            case IN_PROGRESS -> newStatus == Status.TO_DO || newStatus == Status.TESTING;
+            case TESTING -> newStatus == Status.IN_PROGRESS || newStatus == Status.DONE;
+            case DONE ->
+                    newStatus == Status.TESTING; // Permitem redeschiderea task-ului daca pica o verificare post-live
+        };
+
+        if (!isValidTransition && currentStatus != newStatus) {
+            throw new IllegalArgumentException("Tranziție invalidă de status: din " + currentStatus + " in " + newStatus);
+        }
+
+        task.setStatus(newStatus);
+        return convertToDTO(task);
     }
 
     private TaskDTO convertToDTO(Task task) {
