@@ -1,1 +1,19 @@
-<router-outlet></router-outlet>
+@if (authService.currentUser()) {
+  <header class="main-navbar">
+    <div class="navbar-brand">
+      <span class="logo">🚀 AI Project Manager</span>
+    </div>
+
+    <div class="navbar-actions">
+      <div class="user-info">
+        👤 Salut, <strong>{{ authService.currentUser()?.username }}</strong>
+        <span class="user-role">({{ authService.currentUser()?.role }})</span>
+      </div>
+      <button class="btn btn--logout" (click)="authService.logout()">Delogare</button>
+    </div>
+  </header>
+}
+
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>

@@ -2,6 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable, signal} from '@angular/core';
 import {tap} from 'rxjs';
 import {AuthResponse} from '../../shared/models/auth-response';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class AuthService {
   private readonly apiUrl: string = 'http://localhost:8089/api/auth/login';
   currentUser = signal<AuthResponse | null>(this.getUserFromStorage());
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
   }
 
   login(loginRequest: LoginRequest) {
@@ -35,5 +36,11 @@ export class AuthService {
   private getUserFromStorage(): AuthResponse | null {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : null;
+  }
+
+  logout(): void {
+    localStorage.removeItem('user'); // Ștergem obiectul din memorie
+    this.currentUser.set(null);      // Resetăm semnalul reactiv
+    this.router.navigate(['/login']); // Trimitem user-ul la ușa din față
   }
 }
