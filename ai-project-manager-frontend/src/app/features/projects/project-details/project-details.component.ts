@@ -31,6 +31,8 @@ export class ProjectDetailsComponent implements OnInit {
   // Avem nevoie de asta doar pentru empty state
   totalTasksCount = signal<number>(0);
 
+  isUpdating = signal<boolean>(false);
+
   private route = inject(ActivatedRoute);
   private projectService = inject(ProjectService);
   private taskService = inject(TaskService);
@@ -151,23 +153,40 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   onUpdate(): void {
-    if (this.editForm.valid) {
-      const currentProject = this.project();
-      if (!currentProject || !currentProject.id) return;
-
-      const updatedProjectData: ProjectUpdate = {
-        name: this.editForm.value.name ?? '',
-        description: this.editForm.value.description ?? ''
-      };
-
-      this.projectService.updateProject(currentProject.id, updatedProjectData).subscribe({
-        next: (response) => {
-          this.project.set(response);
-          this.isEditing = false;
-        },
-        error: (err) => console.error('Eroare la actualizarea proiectului:', err)
-      });
+    // Verificăm formularul și forțăm afișarea erorilor dacă utilizatorul a dat click pe buton fără să completeze
+    if (this.editForm.invalid) {
+      this.editForm.markAllAsTouched();
+      return;
     }
+
+    const currentProject = this.project();
+    if (!currentProject || !currentProject.id) return;
+
+    // Setăm starea de loading pentru a bloca UI-ul
+    this.isUpdating.set(true);
+
+    const updatedProjectData: ProjectUpdate = {
+      name: this.editForm.value.name ?? '',
+      description: this.editForm.value.description ?? ''
+    };
+
+    this.projectService.updateProject(currentProject.id, updatedProjectData).subscribe({
+      next: (response) => {
+        this.project.set(response);
+        this.isEditing = false;
+        this.isUpdating.set(false);
+
+        // TODO: Aici ar trebui să apelezi un serviciu de notificări
+        // ex: this.notificationService.success('Proiectul a fost actualizat cu succes!');
+      },
+      error: (err) => {
+        this.isUpdating.set(false);
+        console.error('Eroare la actualizarea proiectului:', err);
+
+        // TODO: Afișare eroare către utilizator
+        // ex: this.notificationService.error('A apărut o eroare la salvarea modificărilor.');
+      }
+    });
   }
 
   openCreateTaskDialog(): void {

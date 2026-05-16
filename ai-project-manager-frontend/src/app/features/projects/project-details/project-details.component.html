@@ -28,14 +28,35 @@
       } @else {
         <form [formGroup]="editForm" (ngSubmit)="onUpdate()" class="details-card__form">
           <div class="details-card__group">
-            <label class="details-card__label">Nume Proiect</label>
-            <input type="text" formControlName="name" class="details-card__input">
+            <label class="details-card__label" for="projectName">Nume Proiect <span class="required">*</span></label>
+            <input type="text" id="projectName" formControlName="name" class="details-card__input"
+                   [class.input-error]="editForm.get('name')?.invalid && editForm.get('name')?.touched">
+
+            @if (editForm.get('name')?.invalid && editForm.get('name')?.touched) {
+              <div class="error-message">
+                @if (editForm.get('name')?.hasError('required')) {
+                  <small>Numele proiectului este obligatoriu.</small>
+                }
+                @if (editForm.get('name')?.hasError('minlength')) {
+                  <small>Numele trebuie să aibă cel puțin 3 caractere.</small>
+                }
+              </div>
+            }
           </div>
+
           <div class="details-card__group">
-            <label class="details-card__label">Descriere</label>
-            <textarea formControlName="description" rows="5" class="details-card__input"></textarea>
+            <label class="details-card__label" for="projectDescription">Descriere</label>
+            <textarea id="projectDescription" formControlName="description" rows="5" class="details-card__input"></textarea>
           </div>
-          <button type="submit" class="btn btn--primary" [disabled]="editForm.invalid">Salvează Modificările</button>
+
+          <div class="details-card__actions">
+            <button type="submit" class="btn btn--primary" [disabled]="editForm.invalid || isUpdating()">
+              {{ isUpdating() ? 'Se salvează...' : 'Salvează Modificările' }}
+            </button>
+            <button type="button" class="btn btn--secondary" (click)="toggleEdit()" [disabled]="isUpdating()">
+              Anulează
+            </button>
+          </div>
         </form>
       }
     </section>

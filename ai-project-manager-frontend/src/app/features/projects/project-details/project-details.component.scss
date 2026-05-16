@@ -37,6 +37,7 @@ $shadow-drag: 0 8px 16px rgba(9, 30, 66, 0.25);
 }
 
 // --- CARD DETALII PROIECT ---
+// --- CARD DETALII PROIECT (EXTINS CU FORMULAR DE EDITARE) ---
 .details-card {
   background: #ffffff;
   border-radius: 8px;
@@ -64,6 +65,104 @@ $shadow-drag: 0 8px 16px rgba(9, 30, 66, 0.25);
     line-height: 1.6;
     margin: 0;
     font-size: 0.95rem;
+  }
+
+  // --- INTEGRĂRI NOI PENTRU FAZA DE UPDATE (VALIDARE ȘI UX) ---
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 0.5rem;
+  }
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .required {
+      color: #de350b; // Roșu specific Jira pentru elemente obligatorii
+      font-weight: bold;
+      margin-left: 0.25rem;
+    }
+  }
+
+  &__label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: $text-muted; // Refolosim variabila ta: #5e6c84
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__input {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.95rem;
+    border: 2px solid #dfe1e6;
+    border-radius: 4px;
+    background-color: #fafbfc; // Contrast fin cu cardul alb
+    color: $text-main; // Refolosim variabila ta: #172b4d
+    transition: border-color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+    font-family: inherit;
+
+    &:focus {
+      outline: none;
+      border-color: #0052cc; // Albastru Jira standard pentru focus active
+      background-color: #ffffff;
+    }
+
+    // Stare vizuală critică în caz de eroare la validare (UX îmbunătățit)
+    &.input-error {
+      border-color: #de350b;
+      background-color: #ffebe6; // Fundal roșiatic subtil pentru evidențiere
+
+      &:focus {
+        border-color: #de350b;
+      }
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 100px;
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  // Containerul pentru mesajul text de eroare plasat sub input
+  .error-message {
+    color: #de350b;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    font-weight: 500;
+    display: block;
+    animation: fadeIn 0.2s ease-in-out; // Animație fluidă la apariția erorii
+  }
+}
+
+// Animație simplă pentru elementele de validare reactive
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
