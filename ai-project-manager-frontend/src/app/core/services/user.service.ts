@@ -10,4 +10,8 @@ export class UserService {
   getAllUsers(): Observable<User[]> {
     return this.httpClient.get<User[]>(this.apiUrl);
   }
+
+  createUser(userDto: UserCreate): Observable<User> {
+    return this.httpClient.post<User>(this.apiUrl, userDto);
+  }
 }

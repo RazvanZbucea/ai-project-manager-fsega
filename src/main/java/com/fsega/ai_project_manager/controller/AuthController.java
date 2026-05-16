@@ -28,7 +28,6 @@ public class AuthController {
     private final JwtService jwtService;
     private final UserService userService;
 
-    // În AuthController.java
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody LoginRequestDTO request) {
         Authentication authentication = authenticationManager.authenticate(

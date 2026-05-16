@@ -146,11 +146,17 @@ public class UserService {
     }
 
     private UserDTO convertToDTO(User user) {
+        String roleName = user.getRoles().stream()
+                .findFirst()
+                .map(role -> role.getName().name().replace("ROLE_", ""))
+                .orElse("DEVELOPER");
+
         return new UserDTO(user.getId(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getFirstName(),
                 user.getLastName(),
+                roleName,
                 user.getCreatedAt().toString(),
                 user.getUpdatedAt().toString());
     }

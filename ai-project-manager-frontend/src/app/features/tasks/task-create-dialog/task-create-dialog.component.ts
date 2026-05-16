@@ -4,6 +4,7 @@ import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {DIALOG_DATA, DialogRef} from '@angular/cdk/dialog';
 import {TaskService} from '../../../core/services/task.service';
 import {UserService} from '../../../core/services/user.service';
+import {User} from '../../../shared/models/user';
 
 @Component({
   selector: 'app-task-create-dialog',
