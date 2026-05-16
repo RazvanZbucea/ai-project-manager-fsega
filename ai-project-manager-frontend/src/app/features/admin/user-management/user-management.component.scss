@@ -1,0 +1,217 @@
+// --- VARIABILE PENTRU DESIGN (Stil Jira / Atlassian) ---
+$color-text-main: #172b4d;
+$color-text-subtle: #5e6c84;
+$color-border: #dfe1e6;
+$color-bg-card: #ffffff;
+$color-bg-body: #f4f5f7;
+$color-primary: #0052cc;
+$color-primary-hover: #0047b3;
+$color-danger: #de350b;
+$color-danger-bg: #ffebe6;
+$color-success: #00875a;
+$color-success-bg: #e3fcef;
+
+.admin-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: $color-text-main;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+}
+
+// --- ALERTE (Succes / Eroare) ---
+.alert {
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+
+  &-success {
+    background-color: $color-success-bg;
+    color: $color-success;
+    border-left: 4px solid $color-success;
+  }
+
+  &-danger {
+    background-color: $color-danger-bg;
+    color: $color-danger;
+    border-left: 4px solid $color-danger;
+  }
+}
+
+// --- FORMULARUL DE CREARE UTILIZATOR ---
+.create-user-card {
+  background-color: $color-bg-card;
+  border: 1px solid $color-border;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2.5rem;
+
+  h3 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    color: $color-text-subtle;
+    border-bottom: 1px solid $color-border;
+    padding-bottom: 0.5rem;
+  }
+
+  form {
+    display: grid;
+    grid-template-columns: 1fr 1fr; // Două coloane egale
+    column-gap: 1.5rem;
+    row-gap: 1.25rem;
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+
+      // Numele și Prenumele ocupă câte o coloană (default).
+      // Restul câmpurilor le facem să se întindă pe toată lățimea formularului.
+      &:nth-child(3), // Email
+      &:nth-child(4), // Parolă
+      &:nth-child(5) { // Rol
+        grid-column: 1 / -1;
+      }
+
+      label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: $color-text-subtle;
+        margin-bottom: 0.4rem;
+      }
+
+      input, select {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.95rem;
+        color: $color-text-main;
+        border: 2px solid $color-border;
+        border-radius: 4px;
+        background-color: #fafbfc;
+        transition: background-color 0.2s, border-color 0.2s;
+        outline: none;
+
+        &:focus {
+          background-color: #ffffff;
+          border-color: #4c9aff; // Culoare de focus albastră
+        }
+      }
+
+      select {
+        cursor: pointer;
+      }
+
+      .error {
+        color: $color-danger;
+        font-size: 0.8rem;
+        margin-top: 0.4rem;
+        font-weight: 500;
+      }
+    }
+
+    button[type="submit"] {
+      grid-column: 1 / -1;
+      justify-self: flex-start; // Butonul să nu se întindă pe tot ecranul
+      background-color: $color-primary;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      padding: 0.6rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin-top: 0.5rem;
+
+      &:hover:not(:disabled) {
+        background-color: $color-primary-hover;
+      }
+
+      &:disabled {
+        background-color: rgba($color-primary, 0.5);
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+// --- TABELUL DE UTILIZATORI ---
+.users-list {
+  background-color: $color-bg-card;
+  border: 1px solid $color-border;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  overflow: hidden; // Pentru marginile rotunjite ale tabelului
+
+  h3 {
+    margin: 0;
+    padding: 1.5rem;
+    font-size: 1.1rem;
+    color: $color-text-subtle;
+    border-bottom: 1px solid $color-border;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+
+    th, td {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid $color-border;
+    }
+
+    th {
+      background-color: #f4f5f7;
+      color: $color-text-subtle;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    tbody tr {
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: #fafbfc;
+      }
+
+      &:last-child td {
+        border-bottom: none; // Scoatem bordura ultimului rând
+      }
+    }
+
+    // Stilizarea Badge-urilor dinamice
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: 3px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+
+      // Aceste clase sunt aplicate de [ngClass]="user.role.toLowerCase()"
+      &.admin {
+        background-color: $color-danger-bg;
+        color: $color-danger;
+      }
+
+      &.manager {
+        background-color: #e6fcff; // Cyan deschis
+        color: #00b8d9;
+      }
+
+      &.developer {
+        background-color: #eae6ff; // Mov deschis
+        color: #403294;
+      }
+    }
+  }
+}

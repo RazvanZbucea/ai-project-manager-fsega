@@ -4,6 +4,16 @@
       <span class="logo">🚀 AI Project Manager</span>
     </div>
 
+    <nav class="navbar-menu">
+      <a routerLink="/projects" routerLinkActive="active-link" class="nav-link">Proiecte</a>
+
+      @if (authService.hasRole('ADMIN')) {
+        <a routerLink="/admin/users" routerLinkActive="active-link" class="nav-link">
+          <span class="icon">⚙️</span> Management Utilizatori
+        </a>
+      }
+    </nav>
+
     <div class="navbar-actions">
       <div class="user-info">
         👤 Salut, <strong>{{ authService.currentUser()?.username }}</strong>

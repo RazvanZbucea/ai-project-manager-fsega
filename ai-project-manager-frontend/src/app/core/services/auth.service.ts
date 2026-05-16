@@ -26,12 +26,19 @@ export class AuthService {
     );
   }
 
-  isAuthenticated() {
-    return !!localStorage.getItem('jwToken');
+  isAuthenticated(): boolean {
+    return !!this.getAuthToken(); // Returnează true dacă token-ul există
   }
 
-  getAuthToken() {
-    return localStorage.getItem('jwToken');
+  getAuthToken(): string | null {
+    const userJson = localStorage.getItem('user');
+    if (userJson) {
+      const user = JSON.parse(userJson);
+      // Verifică în AuthResponse.ts cum se numește exact câmpul.
+      // Presupunem că e 'token'. Dacă e 'jwt', pui user.jwt
+      return user.token;
+    }
+    return null;
   }
 
   hasRole(role: string): boolean {

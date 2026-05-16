@@ -19,6 +19,38 @@
     }
   }
 
+  // --- NOUL MENIU DE NAVIGARE ---
+  .navbar-menu {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+
+    .nav-link {
+      text-decoration: none;
+      color: #deebff; // Un albastru foarte deschis, specific temelor dark
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 0.4rem 1rem;
+      border-radius: 4px; // Păstrăm 4px pentru consistență cu butonul de logout
+      transition: all 0.2s ease-in-out;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1); // Efect subtil la hover
+        color: #ffffff;
+      }
+
+      // Clasa aplicată automat de Angular când ești pe ruta respectivă
+      &.active-link {
+        background-color: #0052cc; // Albastru primary Atlassian pentru contrast bun
+        color: #ffffff;
+        font-weight: 600;
+      }
+    }
+  }
+
   .navbar-actions {
     display: flex;
     align-items: center;
