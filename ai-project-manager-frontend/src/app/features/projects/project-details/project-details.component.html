@@ -64,7 +64,14 @@
     <section class="tasks-section">
       <div class="tasks-section__header">
         <h3>Kanban Board</h3>
-        <button class="btn btn--secondary btn--sm" (click)="openCreateTaskDialog()">+ Adaugă Task</button>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn btn--secondary btn--sm"
+                  (click)="generateTasksFromAI()"
+                  [disabled]="isGeneratingTasks()">
+            {{ isGeneratingTasks() ? '✨ Se generează...' : '✨ Generează cu AI' }}
+          </button>
+          <button class="btn btn--primary btn--sm" (click)="openCreateTaskDialog()">+ Adaugă Task</button>
+        </div>
       </div>
 
       @if (totalTasksCount() > 0) {
@@ -168,7 +175,18 @@
       } @else {
         <div class="tasks-section__empty">
           <p>Nu există task-uri asociate. Folosește AI pentru a genera automat task-uri din descrierea proiectului.</p>
-          <button class="btn btn--primary" style="margin-top: 1rem;">✨ Generează cu AI</button>
+          <button class="btn btn--primary"
+                  style="margin-top: 1rem;"
+                  (click)="generateTasksFromAI()"
+                  [disabled]="isGeneratingTasks() || !project()?.description">
+            {{ isGeneratingTasks() ? '✨ Magia are loc...' : '✨ Generează cu AI' }}
+          </button>
+
+          @if (!project()?.description) {
+            <p style="color: var(--danger-color); font-size: 0.85rem; margin-top: 0.5rem;">
+              ⚠️ Proiectul nu are descriere! Adaugă o descriere (Editează Proiect) pentru ca AI-ul să aibă context.
+            </p>
+          }
         </div>
       }
     </section>

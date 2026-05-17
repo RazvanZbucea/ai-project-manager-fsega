@@ -12,6 +12,9 @@ public record UserUpdateDTO(
         String firstName,
 
         @NotBlank(message = "Numele este obligatoriu")
-        String lastName
+        String lastName,
+
+        @NotBlank(message = "Rolul este obligatoriu")
+        String role
 ) {
 }

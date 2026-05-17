@@ -32,6 +32,7 @@ export class ProjectDetailsComponent implements OnInit {
   totalTasksCount = signal<number>(0);
 
   isUpdating = signal<boolean>(false);
+  isGeneratingTasks = signal<boolean>(false);
 
   private route = inject(ActivatedRoute);
   private projectService = inject(ProjectService);
@@ -226,6 +227,34 @@ export class ProjectDetailsComponent implements OnInit {
 
     dialogRef.closed.subscribe(result => {
       if (result) this.loadProjectTasks(currentProject!.id);
+    });
+  }
+
+  generateTasksFromAI(): void {
+    const currentProject = this.project();
+    if (!currentProject || !currentProject.id) return;
+
+    // Setăm UI-ul în stare de loading
+    this.isGeneratingTasks.set(true);
+
+    this.taskService.generateTasksWithAI(currentProject.id).subscribe({
+      next: (generatedTasks) => {
+        // AI-ul a terminat. Oprim loading-ul.
+        this.isGeneratingTasks.set(false);
+
+        // Reîncărcăm board-ul pentru a reflecta noile task-uri adăugate de backend
+        // (alternativ puteam face push în semnalele locale, dar un refresh asigură consistența cu baza de date)
+        this.loadProjectTasks(currentProject.id);
+
+        // TODO (Opțional): Integrează un sistem de tip Toast/Snackbar pentru succes
+        // ex: alert(`Au fost generate ${generatedTasks.length} task-uri noi!`);
+      },
+      error: (err) => {
+        this.isGeneratingTasks.set(false);
+        console.error('Eroare la generarea task-urilor via AI:', err);
+        // TODO: Notifică utilizatorul că a apărut o eroare
+        // ex: alert('Eroare la conectarea cu serviciul AI. Încearcă din nou.');
+      }
     });
   }
 }

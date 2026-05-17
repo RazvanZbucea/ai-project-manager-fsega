@@ -20,4 +20,8 @@ export class TaskService {
   updateTask(id: number, task: TaskUpdate): Observable<Task> {
     return this.httpClient.put<Task>(`${this.apiUrl}/${id}`, task);
   }
+
+  generateTasksWithAI(projectId: number): Observable<Task[]> {
+    return this.httpClient.post<Task[]>(`http://localhost:8089/api/projects/${projectId}/task/bulk`, {});
+  }
 }

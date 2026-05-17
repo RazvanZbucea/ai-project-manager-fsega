@@ -1,5 +1,6 @@
 interface UserUpdate {
   email: string,
   firstName: string,
-  lastName: string
+  lastName: string,
+  role: string;
 }

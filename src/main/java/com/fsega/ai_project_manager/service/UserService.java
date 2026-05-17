@@ -64,6 +64,10 @@ public class UserService {
         user.setEmail(userDTO.email());
         user.setFirstName(userDTO.firstName());
         user.setLastName(userDTO.lastName());
+        Role role = roleRepository.findByName(Name.valueOf(userDTO.role()))
+                .orElseThrow(() -> new IllegalStateException("Rolul specificat nu este valid. Rolurile valide sunt: ADMIN, MANAGER, DEVELOPER."));
+        role.getUsers().add(user);
+        user.getRoles().add(role);
 
         return convertToDTO(user);
     }
