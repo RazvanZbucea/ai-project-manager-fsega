@@ -21,7 +21,7 @@ export class UserManagementComponent implements OnInit {
   successMessage = signal<string>('');
   errorMessage = signal<string>('');
 
-  editingUserId = signal<number | null>(null);
+  editingUser = signal<User | null>(null);
 
   // Formularele rămân Reactive Forms (încă nu există o alternativă nativă bazată complet pe semnale în Angular core pentru form group-uri)
   userForm!: FormGroup;
@@ -90,7 +90,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   startEdit(user: User): void {
-    this.editingUserId.set(user.id);
+    this.editingUser.set(user);
     this.editUserForm.patchValue({
       firstName: user.firstName,
       lastName: user.lastName,
@@ -102,13 +102,13 @@ export class UserManagementComponent implements OnInit {
   }
 
   cancelEdit(): void {
-    this.editingUserId.set(null);
+    this.editingUser.set(null);
     this.editUserForm.reset();
   }
 
   onUpdate(): void {
-    const currentId = this.editingUserId();
-    if (this.editUserForm.invalid || !currentId) {
+    const currentUser = this.editingUser();
+    if (this.editUserForm.invalid || !currentUser) {
       this.editUserForm.markAllAsTouched();
       return;
     }
@@ -116,7 +116,7 @@ export class UserManagementComponent implements OnInit {
     this.isUpdating.set(true);
     const updatedData: UserUpdate = this.editUserForm.value;
 
-    this.userService.updateUser(currentId, updatedData).subscribe({
+    this.userService.updateUser(currentUser.id, updatedData).subscribe({
       next: (updatedUser) => {
         // Actualizăm utilizatorul specific în interiorul semnalului
         this.users.update(currentUsers =>
@@ -131,6 +131,27 @@ export class UserManagementComponent implements OnInit {
         console.error('Eroare la actualizare', err);
         this.errorMessage.set('Eroare la actualizarea utilizatorului.');
         this.isUpdating.set(false);
+      }
+    });
+  }
+
+  deleteUser(user: User): void {
+    if (!confirm(`Atenție! Ești sigur că vrei să dezactivezi utilizatorul ${user.firstName} ${user.lastName}?`)) {
+      return;
+    }
+
+    this.userService.deleteUser(user.id).subscribe({
+      next: () => {
+        this.successMessage.set(`Utilizatorul ${user.username} a fost dezactivat cu succes.`);
+
+        // Actualizăm starea locală (Optimistic UI Update)
+        this.users.update(currentUsers =>
+          currentUsers.map(u => u.id === user.id ? { ...u, isDeleted: true } : u)
+        );
+      },
+      error: (err) => {
+        console.error('Eroare la ștergerea utilizatorului:', err);
+        this.errorMessage.set(`Eroare la ștergerea utilizatorului. Verifică permisiunile.`);
       }
     });
   }

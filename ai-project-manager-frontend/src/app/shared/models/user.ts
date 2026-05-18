@@ -7,4 +7,5 @@ export interface User {
   role: string;
   createdAt: string;
   updatedAt: string;
+  isDeleted?: boolean;
 }

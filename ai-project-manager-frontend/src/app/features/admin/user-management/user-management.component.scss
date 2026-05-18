@@ -114,30 +114,6 @@ $color-success-bg: #e3fcef;
         font-weight: 500;
       }
     }
-
-    button[type="submit"] {
-      grid-column: 1 / -1;
-      justify-self: flex-start; // Butonul să nu se întindă pe tot ecranul
-      background-color: $color-primary;
-      color: #ffffff;
-      border: none;
-      border-radius: 4px;
-      padding: 0.6rem 1.5rem;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.2s;
-      margin-top: 0.5rem;
-
-      &:hover:not(:disabled) {
-        background-color: $color-primary-hover;
-      }
-
-      &:disabled {
-        background-color: rgba($color-primary, 0.5);
-        cursor: not-allowed;
-      }
-    }
   }
 }
 
@@ -214,4 +190,82 @@ $color-success-bg: #e3fcef;
       }
     }
   }
+}
+
+// --- SISTEM DE BUTOANE REUTILIZABILE (BEM) ---
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, opacity 0.2s;
+  font-family: inherit;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &--primary {
+    background-color: $color-primary;
+    color: #ffffff;
+    padding: 0.6rem 1.5rem;
+    font-size: 0.95rem;
+
+    &:hover:not(:disabled) {
+      background-color: $color-primary-hover;
+    }
+  }
+
+  &--secondary {
+    background-color: rgba(9, 30, 66, 0.04);
+    color: $color-text-main;
+    padding: 0.6rem 1.5rem;
+    font-size: 0.95rem;
+
+    &:hover:not(:disabled) {
+      background-color: rgba(9, 30, 66, 0.08);
+    }
+  }
+
+  &--danger {
+    background-color: $color-danger;
+    color: #ffffff;
+    padding: 0.6rem 1.5rem;
+    font-size: 0.95rem;
+
+    &:hover:not(:disabled) {
+      // Întunecăm puțin roșul la hover
+      background-color: darken(#de350b, 10%);
+    }
+  }
+
+  &--sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+}
+
+// --- STILURI PENTRU SOFT DELETE (Integritatea Datelor) ---
+.row-deleted {
+  background-color: #fafbfc;
+
+  td {
+    color: $color-text-subtle;
+    opacity: 0.7; // Estompăm textul pentru rândurile șterse
+  }
+
+  // Evidențiem vizual că rândul e dezactivat, dar lăsăm badge-urile la opacitate normală
+  .badge {
+    opacity: 1;
+  }
+}
+
+// Badge specific pentru Inactiv / Arhivat
+.badge--archived {
+  background-color: $color-danger-bg;
+  color: $color-danger;
 }
