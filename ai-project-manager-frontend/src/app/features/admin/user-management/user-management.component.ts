@@ -40,6 +40,7 @@ export class UserManagementComponent implements OnInit {
 
   initForms(): void {
     this.userForm = this.fb.group({
+      username: ['', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -49,6 +50,7 @@ export class UserManagementComponent implements OnInit {
 
     // Am adăugat câmpul role în formularul de editare
     this.editUserForm = this.fb.group({
+      username: ['', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -92,6 +94,7 @@ export class UserManagementComponent implements OnInit {
   startEdit(user: User): void {
     this.editingUser.set(user);
     this.editUserForm.patchValue({
+      username: user.username,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,

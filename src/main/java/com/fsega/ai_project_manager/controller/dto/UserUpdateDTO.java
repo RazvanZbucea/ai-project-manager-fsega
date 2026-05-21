@@ -4,6 +4,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 public record UserUpdateDTO(
+        @NotBlank(message = "Username-ul este obligatoriu")
+        String username,
+
         @NotBlank(message = "Email-ul este obligatoriu")
         @Email(message = "Formatul email-ului este invalid")
         String email,

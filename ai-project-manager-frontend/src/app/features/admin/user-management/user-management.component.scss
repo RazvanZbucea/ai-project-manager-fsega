@@ -68,15 +68,24 @@ $color-success-bg: #e3fcef;
     column-gap: 1.5rem;
     row-gap: 1.25rem;
 
+    // --- REZOLVAREA PENTRU BUTON ---
+    button[type="submit"] {
+      grid-column: 1 / -1; // Mutăm butonul pe un rând nou, pe toată lățimea
+      justify-self: start; // Îi spunem să NU se mai întindă, ci să se alinieze la stânga
+      margin-top: 0.5rem;
+    }
+    // -------------------------------
+
     .form-group {
       display: flex;
       flex-direction: column;
 
-      // Numele și Prenumele ocupă câte o coloană (default).
-      // Restul câmpurilor le facem să se întindă pe toată lățimea formularului.
-      &:nth-child(3), // Email
-      &:nth-child(4), // Parolă
-      &:nth-child(5) { // Rol
+      // Am actualizat indecșii deoarece am adăugat Username pe poziția 1
+      // Acum: 1=Username, 2=Prenume, 3=Nume. Vrem ca Username, Email, Parola și Rol să fie pe tot rândul
+      &:nth-child(1), // Username
+      &:nth-child(4), // Email
+      &:nth-child(5), // Parolă
+      &:nth-child(6) { // Rol
         grid-column: 1 / -1;
       }
 
