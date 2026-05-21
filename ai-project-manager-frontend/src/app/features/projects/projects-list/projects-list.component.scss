@@ -158,6 +158,13 @@
     align-items: center;
   }
 
+  // --- ADĂUGAT PENTRU ALINIEREA BUTOANELOR ---
+  &__actions {
+    display: flex;
+    gap: 0.5rem; // Spațiu între butoanele Arhivează și Vezi Detalii
+  }
+  // -------------------------------------------
+
   &__id {
     color: $color-text-muted;
     font-size: 0.75rem;

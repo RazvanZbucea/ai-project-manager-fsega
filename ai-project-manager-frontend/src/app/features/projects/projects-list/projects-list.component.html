@@ -63,11 +63,22 @@
         </div>
         <div class="project-card__footer">
           <span class="project-card__id">#{{ project.id }}</span>
-          <button
-            [routerLink]="['/projects', project.id]"
-            class="btn btn--secondary">
-            Vezi Detalii
-          </button>
+
+          <div class="project-card__actions">
+            <button
+              class="btn btn--sm btn--danger"
+              (click)="onDeleteProject(project)"
+              [disabled]="project.isDeleted"
+              [title]="project.isDeleted ? 'Proiectul este deja arhivat' : 'Arhivează proiectul'">
+              🗑️ Arhivează
+            </button>
+
+            <button
+              [routerLink]="['/projects', project.id]"
+              class="btn btn--sm btn--secondary">
+              Vezi Detalii
+            </button>
+          </div>
         </div>
       </article>
     } @empty {

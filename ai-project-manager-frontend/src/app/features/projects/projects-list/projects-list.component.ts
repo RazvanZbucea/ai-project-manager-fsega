@@ -1,9 +1,8 @@
-import {Component, inject} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ProjectService} from '../../../core/services/project.service';
-import {toSignal} from '@angular/core/rxjs-interop';
-import {RouterLink} from '@angular/router';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ProjectService } from '../../../core/services/project.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-projects-list',
@@ -12,17 +11,30 @@ import {RouterLink} from '@angular/router';
   templateUrl: './projects-list.component.html',
   styleUrls: ['./projects-list.component.scss']
 })
-export class ProjectsListComponent {
+export class ProjectsListComponent implements OnInit {
   private projectService = inject(ProjectService);
   private fb = inject(FormBuilder);
 
-  projects = toSignal(this.projectService.getProjects(), {initialValue: []});
+  // 1. Folosim WritableSignal în loc de toSignal
+  projects = signal<Project[]>([]);
   isCreatingProject = false;
 
   projectForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
     description: ['']
   });
+
+  // 2. Încărcăm datele la inițializare
+  ngOnInit(): void {
+    this.loadProjects();
+  }
+
+  loadProjects(): void {
+    this.projectService.getProjects().subscribe({
+      next: (data) => this.projects.set(data),
+      error: (err) => console.error('Eroare la încărcarea proiectelor', err)
+    });
+  }
 
   toggleForm() {
     this.isCreatingProject = !this.isCreatingProject;
@@ -39,13 +51,35 @@ export class ProjectsListComponent {
       };
 
       this.projectService.createProject(newProject).subscribe({
-        next: (response) => {
-          console.log('Project created successfully:', response);
+        next: (createdProject) => {
+          console.log('Project created successfully:', createdProject);
+
+          // 3. Adăugăm proiectul în lista curentă FĂRĂ refresh la pagină
+          this.projects.update(currentProjects => [...currentProjects, createdProject]);
+
           this.toggleForm();
-          window.location.reload();
         },
         error: (error) => {
           console.error('Failed to create project:', error);
+        }
+      });
+    }
+  }
+
+  onDeleteProject(project: Project): void {
+    if (confirm(`Ești sigur că vrei să arhivezi proiectul "${project.name}"?`)) {
+      this.projectService.deleteProject(project.id).subscribe({
+        next: () => {
+          // Folosim map() în loc de filter() pentru a actualiza statusul proiectului
+          // fără a-l scoate din lista afișată pe ecran
+          this.projects.update(currentProjects =>
+            currentProjects.map(p =>
+              p.id === project.id ? { ...p, isDeleted: true } : p
+            )
+          );
+        },
+        error: (err) => {
+          console.error('Eroare la arhivarea proiectului', err);
         }
       });
     }
