@@ -9,6 +9,12 @@
 
   <div class="dialog-content">
 
+    @if (isProjectDeleted()) {
+      <div class="alert alert-danger" style="margin-bottom: 1rem; padding: 0.75rem; border-radius: 4px; background-color: #ffebe6; color: #de350b;">
+        ⚠️ Proiectul este arhivat. Modificările sunt dezactivate.
+      </div>
+    }
+
     <section class="task-details-section">
       <form [formGroup]="taskForm" (ngSubmit)="onUpdateTask()" class="dialog-form">
         <div class="form-group">
@@ -59,16 +65,20 @@
             </div>
           </div>
         } @empty {
-          <p class="no-comments">Nu există comentarii. Fii primul care lasă un mesaj!</p>
+          <p class="no-comments">Nu există comentarii.</p>
         }
       </div>
 
-      <form [formGroup]="commentForm" (ngSubmit)="onAddComment()" class="comment-form">
-        <div class="comment-input-wrapper">
-          <textarea formControlName="content" placeholder="Scrie un comentariu..." rows="2"></textarea>
-          <button type="submit" class="btn btn--secondary btn--sm" [disabled]="commentForm.invalid">Trimite</button>
-        </div>
-      </form>
+      @if (!isProjectDeleted()) {
+        <form [formGroup]="commentForm" (ngSubmit)="onAddComment()" class="comment-form">
+          <div class="comment-input-wrapper">
+            <textarea formControlName="content" placeholder="Scrie un comentariu..." rows="2"></textarea>
+            <button type="submit" class="btn btn--secondary btn--sm" [disabled]="commentForm.invalid">Trimite</button>
+          </div>
+        </form>
+      } @else {
+        <p class="no-comments" style="color: #6b778c;">Adăugarea de comentarii este dezactivată pentru proiectele arhivate.</p>
+      }
     </section>
 
   </div>

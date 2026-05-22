@@ -5,7 +5,10 @@
       <h1 class="project-details-page__title">Detalii Proiect</h1>
     </div>
     <div class="project-details-page__actions">
-      <button class="btn btn--primary" (click)="toggleEdit()">
+      <button class="btn btn--primary"
+              (click)="toggleEdit()"
+              [disabled]="project()?.isDeleted"
+              [title]="project()?.isDeleted ? 'Acest proiect este arhivat și nu mai poate fi modificat.' : ''">
         {{ isEditing ? 'Anulează' : 'Editează Proiect' }}
       </button>
     </div>
@@ -67,10 +70,17 @@
         <div style="display: flex; gap: 10px;">
           <button class="btn btn--secondary btn--sm"
                   (click)="generateTasksFromAI()"
-                  [disabled]="isGeneratingTasks()">
+                  [disabled]="isGeneratingTasks() || project()?.isDeleted"
+                  [title]="project()?.isDeleted ? 'Proiectul este arhivat.' : ''">
             {{ isGeneratingTasks() ? '✨ Se generează...' : '✨ Generează cu AI' }}
           </button>
-          <button class="btn btn--primary btn--sm" (click)="openCreateTaskDialog()">+ Adaugă Task</button>
+
+          <button class="btn btn--primary btn--sm"
+                  (click)="openCreateTaskDialog()"
+                  [disabled]="project()?.isDeleted"
+                  [title]="project()?.isDeleted ? 'Nu se pot adăuga task-uri la un proiect arhivat.' : ''">
+            + Adaugă Task
+          </button>
         </div>
       </div>
 
@@ -85,11 +95,12 @@
             <div class="kanban-list"
                  id="TO_DO"
                  cdkDropList
+                 [cdkDropListDisabled]="project()?.isDeleted"
                  [cdkDropListData]="todoTasks()"
                  (cdkDropListDropped)="drop($event, 'TO_DO')">
 
               @for (task of todoTasks(); track task.id) {
-                <article class="task-card" cdkDrag (click)="openTaskDetails(task)">
+                <article class="task-card" cdkDrag [cdkDragDisabled]="project()?.isDeleted" (click)="openTaskDetails(task)">
                   <div class="task-card__custom-placeholder" *cdkDragPlaceholder></div>
 
                   <div class="task-card__header">
@@ -112,11 +123,12 @@
             <div class="kanban-list"
                  id="IN_PROGRESS"
                  cdkDropList
+                 [cdkDropListDisabled]="project()?.isDeleted"
                  [cdkDropListData]="inProgressTasks()"
                  (cdkDropListDropped)="drop($event, 'IN_PROGRESS')">
 
               @for (task of inProgressTasks(); track task.id) {
-                <article class="task-card" cdkDrag (click)="openTaskDetails(task)">
+                <article class="task-card" cdkDrag [cdkDragDisabled]="project()?.isDeleted" (click)="openTaskDetails(task)">
                   <div class="task-card__custom-placeholder" *cdkDragPlaceholder></div>
                   <div class="task-card__header"><h5 class="task-card__title">{{ task.title }}</h5></div>
                   <p class="task-card__description">{{ task.description || 'Fără descriere.' }}</p>
@@ -134,11 +146,12 @@
             <div class="kanban-list"
                  id="TESTING"
                  cdkDropList
+                 [cdkDropListDisabled]="project()?.isDeleted"
                  [cdkDropListData]="testingTasks()"
                  (cdkDropListDropped)="drop($event, 'TESTING')">
 
               @for (task of testingTasks(); track task.id) {
-                <article class="task-card" cdkDrag (click)="openTaskDetails(task)">
+                <article class="task-card" cdkDrag [cdkDragDisabled]="project()?.isDeleted" (click)="openTaskDetails(task)">
                   <div class="task-card__custom-placeholder" *cdkDragPlaceholder></div>
                   <div class="task-card__header"><h5 class="task-card__title">{{ task.title }}</h5></div>
                   <p class="task-card__description">{{ task.description || 'Fără descriere.' }}</p>
@@ -156,11 +169,12 @@
             <div class="kanban-list"
                  id="DONE"
                  cdkDropList
+                 [cdkDropListDisabled]="project()?.isDeleted"
                  [cdkDropListData]="doneTasks()"
                  (cdkDropListDropped)="drop($event, 'DONE')">
 
               @for (task of doneTasks(); track task.id) {
-                <article class="task-card" cdkDrag (click)="openTaskDetails(task)">
+                <article class="task-card" cdkDrag [cdkDragDisabled]="project()?.isDeleted" (click)="openTaskDetails(task)">
                   <div class="task-card__custom-placeholder" *cdkDragPlaceholder></div>
                   <div class="task-card__header"><h5 class="task-card__title">{{ task.title }}</h5></div>
                   <p class="task-card__description">{{ task.description || 'Fără descriere.' }}</p>
@@ -178,13 +192,19 @@
           <button class="btn btn--primary"
                   style="margin-top: 1rem;"
                   (click)="generateTasksFromAI()"
-                  [disabled]="isGeneratingTasks() || !project()?.description">
+                  [disabled]="isGeneratingTasks() || !project()?.description || project()?.isDeleted">
             {{ isGeneratingTasks() ? '✨ Magia are loc...' : '✨ Generează cu AI' }}
           </button>
 
-          @if (!project()?.description) {
+          @if (!project()?.description && !project()?.isDeleted) {
             <p style="color: var(--danger-color); font-size: 0.85rem; margin-top: 0.5rem;">
               ⚠️ Proiectul nu are descriere! Adaugă o descriere (Editează Proiect) pentru ca AI-ul să aibă context.
+            </p>
+          }
+
+          @if (project()?.isDeleted) {
+            <p style="color: var(--danger-color); font-size: 0.85rem; margin-top: 0.5rem;">
+              ℹ️ Proiectul este arhivat. Nu se mai pot adăuga sau genera task-uri noi.
             </p>
           }
         </div>
