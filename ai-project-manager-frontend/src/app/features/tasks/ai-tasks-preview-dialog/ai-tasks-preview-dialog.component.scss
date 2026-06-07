@@ -80,29 +80,19 @@
           .task-details {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 0.5rem; /* Un mic spațiu între titlu, descriere și badge-uri */
 
-            strong {
-              font-size: 1rem;
-              color: #333333;
-            }
-
-            span {
+            .task-desc {
               font-size: 0.85rem;
-              color: #555555;
-              line-height: 1.4;
+              color: #555;
             }
 
-            .badge {
-              align-self: flex-start;
-              font-size: 0.75rem;
-              padding: 4px 8px;
-              border-radius: 12px;
-              background-color: #e0e0e0;
-              color: #333333;
-              font-weight: 500;
-              text-transform: uppercase;
-              letter-spacing: 0.5px;
+            /* Noul container pentru badge-uri */
+            .task-badges {
+              display: flex;
+              gap: 0.75rem; /* Spațiu între badge-ul de status și cel de prioritate */
+              align-items: center;
+              margin-top: 0.25rem;
             }
           }
         }

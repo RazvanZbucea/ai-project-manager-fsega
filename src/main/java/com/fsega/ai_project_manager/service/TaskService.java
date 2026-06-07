@@ -155,7 +155,8 @@ public class TaskService {
                 task.getUpdatedAt().toString(),
                 task.getCreatedBy(),
                 task.getUpdatedBy(),
-                assigneeName
+                assigneeName,
+                task.getPriority()
         );
     }
 

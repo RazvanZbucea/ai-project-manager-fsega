@@ -12,8 +12,15 @@
             <input type="checkbox" [checked]="item.selected" (change)="toggleSelection($index)">
             <div class="task-details">
               <strong>{{ item.task.title }}</strong>
-              <span>{{ item.task.description }}</span>
-              <span class="badge">{{ item.task.suggestedStatus }}</span>
+              <span class="task-desc">{{ item.task.description }}</span>
+
+              <div class="task-badges">
+                <span class="badge">{{ item.task.suggestedStatus || 'TO_DO' }}</span>
+                <span class="priority-badge" [ngClass]="'priority-' + item.task.priority">
+                  {{ item.task.priority }}
+                </span>
+              </div>
+
             </div>
           </label>
         </li>

@@ -80,7 +80,7 @@ public class ProjectController {
         }
 
         // Generăm preview-ul, NU salvăm în DB!
-        List<GeneratedTaskDTO> suggestedTasks = taskGenerationService.generateTasksFromDescription(project.description());
+        List<GeneratedTaskDTO> suggestedTasks = taskGenerationService.generateTasksFromDescription(project.description(), projectId);
         return ResponseEntity.ok(suggestedTasks);
     }
 

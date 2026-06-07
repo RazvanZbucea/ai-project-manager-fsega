@@ -3,6 +3,9 @@
     <div class="header-title">
       <h2 class="dialog-title">{{ data.task.title }}</h2>
       <span class="badge badge--info">{{ data.task.assignedName || 'Neasignat' }}</span>
+      <span class="priority-badge" [ngClass]="'priority-' + data.task.priority">
+        {{ data.task.priority }}
+      </span>
     </div>
     <button class="btn-close" (click)="dialogRef.close()">✖</button>
   </header>
@@ -34,6 +37,16 @@
             <option value="IN_PROGRESS">In Progress</option>
             <option value="TESTING">Testing</option>
             <option value="DONE">Done</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Prioritate</label>
+          <select formControlName="priority">
+            <option value="LOW">Scăzută (Low)</option>
+            <option value="MEDIUM">Medie (Medium)</option>
+            <option value="HIGH">Ridicată (High)</option>
+            <option value="CRITICAL">Critică (Critical)</option>
           </select>
         </div>
 

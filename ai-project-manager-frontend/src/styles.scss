@@ -84,3 +84,34 @@ body {
 
   .cdk-overlay-dark-backdrop { background: rgba(9, 30, 66, 0.54); }
 }
+
+/* --- Priority Badges --- */
+.priority-badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &.priority-LOW {
+    background-color: #e0f2fe; // Light blue
+    color: #0284c7; // Dark blue
+  }
+
+  &.priority-MEDIUM {
+    background-color: #fef08a; // Light yellow
+    color: #854d0e; // Dark yellow/brown
+  }
+
+  &.priority-HIGH {
+    background-color: #ffedd5; // Light orange
+    color: #c2410c; // Dark orange
+  }
+
+  &.priority-CRITICAL {
+    background-color: #fee2e2; // Light red
+    color: #b91c1c; // Dark red
+  }
+}

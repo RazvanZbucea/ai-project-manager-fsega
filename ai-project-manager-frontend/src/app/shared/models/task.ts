@@ -7,5 +7,6 @@ interface Task {
   updatedAt: string,
   createdBy: string,
   updatedBy: string,
-  assignedName: string
+  assignedName: string,
+  priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 }

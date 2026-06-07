@@ -30,7 +30,8 @@ export class TaskCreateDialogComponent implements OnInit {
   taskForm = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(3)]],
     description: [''],
-    assignedName: [''] // Va fi populat din select
+    assignedName: [''], // Va fi populat din select
+    priority: ['MEDIUM']
   });
 
   ngOnInit() {
@@ -47,7 +48,8 @@ export class TaskCreateDialogComponent implements OnInit {
         title: this.taskForm.value.title ?? '',
         description: this.taskForm.value.description ?? '',
         assignedName: this.taskForm.value.assignedName ?? '',
-        status: 'TO_DO' // Default status
+        status: 'TO_DO', // Default status
+        priority: (this.taskForm.value.priority || 'MEDIUM') as 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
       };
 
       this.taskService.createTask(this.data.projectId, newTaskData).subscribe({

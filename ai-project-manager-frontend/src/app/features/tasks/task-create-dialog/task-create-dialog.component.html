@@ -28,6 +28,16 @@
       </select>
     </div>
 
+    <div class="form-group">
+      <label>Prioritate</label>
+      <select formControlName="priority">
+        <option value="LOW">Scăzută (Low)</option>
+        <option value="MEDIUM">Medie (Medium)</option>
+        <option value="HIGH">Ridicată (High)</option>
+        <option value="CRITICAL">Critică (Critical)</option>
+      </select>
+    </div>
+
     <div class="dialog-footer">
       <button type="button" class="btn btn--secondary" (click)="closeDialog()">Anulează</button>
       <button type="submit" class="btn btn--primary" [disabled]="taskForm.invalid || isSubmitting()">

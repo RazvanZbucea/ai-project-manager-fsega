@@ -35,7 +35,8 @@ export class TaskDetailsDialogComponent implements OnInit {
   taskForm = this.fb.group({
     title: ['', [Validators.required]],
     description: [''],
-    status: ['']
+    status: [''],
+    priority: ['MEDIUM']
   });
 
   commentForm = this.fb.group({
@@ -73,7 +74,8 @@ export class TaskDetailsDialogComponent implements OnInit {
         title: this.taskForm.value.title ?? '',
         description: this.taskForm.value.description ?? '',
         status: this.taskForm.value.status ?? this.data.task.status,
-        assignedName: this.data.task.assignedName ?? ''
+        assignedName: this.data.task.assignedName ?? '',
+        priority: (this.taskForm.value.priority || this.data.task.priority || 'MEDIUM') as 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
       };
 
       this.taskService.updateTask(this.data.task.id, updateData).subscribe(

@@ -1,5 +1,6 @@
 package com.fsega.ai_project_manager.model;
 
+import com.fsega.ai_project_manager.model.enums.Priority;
 import com.fsega.ai_project_manager.model.enums.Status;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -29,6 +30,9 @@ public class Task {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @Enumerated(EnumType.STRING)
+    private Priority priority;
 
     @CreatedDate
     @Column(updatable = false)
