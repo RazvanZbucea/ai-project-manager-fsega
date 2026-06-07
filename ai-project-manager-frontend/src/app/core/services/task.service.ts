@@ -7,6 +7,7 @@ import {Observable} from 'rxjs';
 })
 export class TaskService {
   private apiUrl = 'http://localhost:8089/api/tasks';
+  private projectApiUrl = 'http://localhost:8089/api/projects';
   private httpClient = inject(HttpClient);
 
   updateTaskStatus(id: number, newStatus: string): Observable<Task> {
@@ -21,7 +22,11 @@ export class TaskService {
     return this.httpClient.put<Task>(`${this.apiUrl}/${id}`, task);
   }
 
-  generateTasksWithAI(projectId: number): Observable<Task[]> {
-    return this.httpClient.post<Task[]>(`http://localhost:8089/api/projects/${projectId}/task/bulk`, {});
+  generateTaskPreview(projectId: number): Observable<GeneratedTask[]> {
+    return this.httpClient.get<GeneratedTask[]>(`${this.projectApiUrl}/${projectId}/tasks/ai-preview`);
+  }
+
+  createTasksBulk(projectId: number, tasks: any[]): Observable<any[]> {
+    return this.httpClient.post<any[]>(`${this.projectApiUrl}/${projectId}/tasks/bulk`, tasks);
   }
 }

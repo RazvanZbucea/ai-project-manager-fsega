@@ -9,6 +9,7 @@ import {Dialog, DialogModule} from '@angular/cdk/dialog';
 import {TaskCreateDialogComponent} from '../../tasks/task-create-dialog/task-create-dialog.component';
 import {TaskDetailsDialogComponent} from '../../tasks/task-details-dialog/task-details-dialog.component';
 import {AuthService} from '../../../core/services/auth.service';
+import {AiTasksPreviewDialogComponent} from '../../tasks/ai-tasks-preview-dialog/ai-tasks-preview-dialog.component';
 
 @Component({
   selector: 'app-project-details',
@@ -226,15 +227,40 @@ export class ProjectDetailsComponent implements OnInit {
 
   generateTasksFromAI(): void {
     const currentProject = this.project();
-    // PROTECȚIE FRONTEND
     if (!currentProject || !currentProject.id || currentProject.isDeleted) return;
 
     this.isGeneratingTasks.set(true);
 
-    this.taskService.generateTasksWithAI(currentProject.id).subscribe({
+    // 1. Cerem preview-ul de la AI
+    this.taskService.generateTaskPreview(currentProject.id).subscribe({
       next: (generatedTasks) => {
         this.isGeneratingTasks.set(false);
-        this.loadProjectTasks(currentProject.id);
+
+        // 2. Deschidem dialogul Human-in-the-Loop
+        const dialogRef = this.dialog.open(AiTasksPreviewDialogComponent, {
+          data: {tasks: generatedTasks, projectId: currentProject.id},
+          width: '700px',
+          backdropClass: 'cdk-overlay-dark-backdrop',
+          disableClose: true
+        });
+
+        // 3. Așteptăm răspunsul utilizatorului
+        dialogRef.closed.subscribe((approvedTasks: any) => {
+          if (approvedTasks && approvedTasks.length > 0) {
+            // Dacă a aprobat task-uri, apelăm backend-ul pentru a le salva oficial
+            this.isUpdating.set(true);
+            this.taskService.createTasksBulk(currentProject.id, approvedTasks).subscribe({
+              next: () => {
+                this.isUpdating.set(false);
+                this.loadProjectTasks(currentProject.id); // Reîncărcăm board-ul
+              },
+              error: (err) => {
+                this.isUpdating.set(false);
+                console.error('Eroare la salvarea task-urilor', err);
+              }
+            });
+          }
+        });
       },
       error: (err) => {
         this.isGeneratingTasks.set(false);

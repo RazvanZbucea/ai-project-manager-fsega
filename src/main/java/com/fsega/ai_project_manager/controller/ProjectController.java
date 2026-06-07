@@ -69,9 +69,19 @@ public class ProjectController {
         return new ResponseEntity<>(taskService.createTask(projectId, taskDTO), HttpStatus.CREATED);
     }
 
-    @PostMapping("/generate-tasks")
-    public ResponseEntity<List<GeneratedTaskDTO>> generateTasks(String description) {
-        return new ResponseEntity<>(taskGenerationService.generateTasksFromDescription(description), HttpStatus.CREATED);
+    @PreAuthorize("hasRole('ADMIN') or @projectService.isProjectOwner(#projectId, authentication.name)")
+    @GetMapping("/{projectId}/tasks/ai-preview")
+    public ResponseEntity<List<GeneratedTaskDTO>> generateTasksPreview(@PathVariable Long projectId) {
+        // Preluăm proiectul pentru a-i folosi descrierea drept context pentru AI
+        ProjectDTO project = projectService.getProjectById(projectId);
+
+        if (project.description() == null || project.description().isBlank()) {
+            throw new IllegalArgumentException("Proiectul nu are o descriere validă pentru a genera task-uri.");
+        }
+
+        // Generăm preview-ul, NU salvăm în DB!
+        List<GeneratedTaskDTO> suggestedTasks = taskGenerationService.generateTasksFromDescription(project.description());
+        return ResponseEntity.ok(suggestedTasks);
     }
 
     @PostMapping("/{projectId}/tasks/bulk")

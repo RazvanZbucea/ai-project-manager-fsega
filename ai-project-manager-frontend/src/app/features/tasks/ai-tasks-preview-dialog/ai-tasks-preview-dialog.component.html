@@ -1,0 +1,28 @@
+<div class="dialog-container">
+  <header class="dialog-header">
+    <h2>Revizuire Task-uri Generate de AI</h2>
+    <p>Selectează task-urile care vrei să fie adăugate în proiectul tău.</p>
+  </header>
+
+  <div class="dialog-content">
+    <ul class="task-list">
+      @for (item of selectableTasks(); track $index) {
+        <li class="task-item" [class.selected]="item.selected">
+          <label class="checkbox-label">
+            <input type="checkbox" [checked]="item.selected" (change)="toggleSelection($index)">
+            <div class="task-details">
+              <strong>{{ item.task.title }}</strong>
+              <span>{{ item.task.description }}</span>
+              <span class="badge">{{ item.task.suggestedStatus }}</span>
+            </div>
+          </label>
+        </li>
+      }
+    </ul>
+  </div>
+
+  <footer class="dialog-actions">
+    <button class="btn btn--secondary" (click)="onCancel()">Anulează</button>
+    <button class="btn btn--primary" (click)="onSave()">Aprobă & Salvează</button>
+  </footer>
+</div>
