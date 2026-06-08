@@ -1,0 +1,43 @@
+services:
+  postgres_db:
+    image: postgres:15-alpine
+    container_name: ai_project_manager_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ai_project_manager_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai_project_manager_backend
+    depends_on:
+      - postgres_db
+    environment:
+      # Aici suprascriem URL-ul din application.properties ca sa tintim containerul de Postgres
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/ai_project_manager_db
+      - DB_PASSWORD=${DB_PASSWORD}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    ports:
+      - "8089:8089"
+    restart: on-failure
+
+  frontend:
+    build:
+      context: ./ai-project-manager-frontend
+      dockerfile: Dockerfile
+    container_name: ai_project_manager_frontend
+    depends_on:
+      - backend
+    ports:
+      - "4200:80" # Mapam portul 4200 extern la portul 80 pe care asculta Nginx
+    restart: always
+
+volumes:
+  pgdata:
