@@ -1,4 +1,4 @@
-interface GeneratedTask {
+export interface GeneratedTask {
   title: string,
   description: string,
   suggestedStatus: string,

@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {UserService} from '../../../core/services/user.service';
 import {User} from '../../../shared/models/user';
+import {UserUpdate} from '../../../shared/models/user-update';
 
 @Component({
   selector: 'app-user-management',

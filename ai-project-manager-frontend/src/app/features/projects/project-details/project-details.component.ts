@@ -10,6 +10,9 @@ import {TaskCreateDialogComponent} from '../../tasks/task-create-dialog/task-cre
 import {TaskDetailsDialogComponent} from '../../tasks/task-details-dialog/task-details-dialog.component';
 import {AuthService} from '../../../core/services/auth.service';
 import {AiTasksPreviewDialogComponent} from '../../tasks/ai-tasks-preview-dialog/ai-tasks-preview-dialog.component';
+import {Task} from '../../../shared/models/task';
+import {Project} from '../../../shared/models/project';
+import {ProjectUpdate} from '../../../shared/models/project-update';
 
 @Component({
   selector: 'app-project-details',

@@ -1,4 +1,4 @@
-interface ProjectCreate {
+export interface ProjectCreate {
   name: string,
   description: string
 }

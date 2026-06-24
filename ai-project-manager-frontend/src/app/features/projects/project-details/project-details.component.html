@@ -49,7 +49,8 @@
 
           <div class="details-card__group">
             <label class="details-card__label" for="projectDescription">Descriere</label>
-            <textarea id="projectDescription" formControlName="description" rows="5" class="details-card__input"></textarea>
+            <textarea id="projectDescription" formControlName="description" rows="5"
+                      class="details-card__input"></textarea>
           </div>
 
           <div class="details-card__actions">
@@ -100,7 +101,8 @@
                  (cdkDropListDropped)="drop($event, 'TO_DO')">
 
               @for (task of todoTasks(); track task.id) {
-                <article class="task-card" cdkDrag [cdkDragDisabled]="project()?.isDeleted" (click)="openTaskDetails(task)">
+                <article class="task-card" cdkDrag [cdkDragDisabled]="project()?.isDeleted"
+                         (click)="openTaskDetails(task)">
                   <div class="task-card__custom-placeholder" *cdkDragPlaceholder></div>
 
                   <div class="task-card__header">
@@ -110,6 +112,9 @@
                      [title]="task.description">{{ task.description || 'Fără descriere.' }}</p>
                   <div class="task-card__footer">
                     <span class="task-card__assignee">👤 {{ task.assignedName ? task.assignedName : 'Neasignat' }}</span>
+                    <span class="task-priority badge priority-{{ task.priority | lowercase }}">
+                      {{ task.priority }}
+                    </span>
                   </div>
                 </article>
               }
@@ -128,11 +133,16 @@
                  (cdkDropListDropped)="drop($event, 'IN_PROGRESS')">
 
               @for (task of inProgressTasks(); track task.id) {
-                <article class="task-card" cdkDrag [cdkDragDisabled]="project()?.isDeleted" (click)="openTaskDetails(task)">
+                <article class="task-card" cdkDrag [cdkDragDisabled]="project()?.isDeleted"
+                         (click)="openTaskDetails(task)">
                   <div class="task-card__custom-placeholder" *cdkDragPlaceholder></div>
                   <div class="task-card__header"><h5 class="task-card__title">{{ task.title }}</h5></div>
                   <p class="task-card__description">{{ task.description || 'Fără descriere.' }}</p>
-                  <div class="task-card__footer"><span class="task-card__assignee">👤 {{ task.assignedName }}</span>
+                  <div class="task-card__footer">
+                    <span class="task-card__assignee">👤 {{ task.assignedName }}</span>
+                    <span class="task-priority badge priority-{{ task.priority | lowercase }}">
+                      {{ task.priority }}
+                    </span>
                   </div>
                 </article>
               }
@@ -151,11 +161,16 @@
                  (cdkDropListDropped)="drop($event, 'TESTING')">
 
               @for (task of testingTasks(); track task.id) {
-                <article class="task-card" cdkDrag [cdkDragDisabled]="project()?.isDeleted" (click)="openTaskDetails(task)">
+                <article class="task-card" cdkDrag [cdkDragDisabled]="project()?.isDeleted"
+                         (click)="openTaskDetails(task)">
                   <div class="task-card__custom-placeholder" *cdkDragPlaceholder></div>
                   <div class="task-card__header"><h5 class="task-card__title">{{ task.title }}</h5></div>
                   <p class="task-card__description">{{ task.description || 'Fără descriere.' }}</p>
-                  <div class="task-card__footer"><span class="task-card__assignee">👤 {{ task.assignedName }}</span>
+                  <div class="task-card__footer">
+                    <span class="task-card__assignee">👤 {{ task.assignedName }}</span>
+                    <span class="task-priority badge priority-{{ task.priority | lowercase }}">
+                      {{ task.priority }}
+                    </span>
                   </div>
                 </article>
               }
@@ -174,11 +189,16 @@
                  (cdkDropListDropped)="drop($event, 'DONE')">
 
               @for (task of doneTasks(); track task.id) {
-                <article class="task-card" cdkDrag [cdkDragDisabled]="project()?.isDeleted" (click)="openTaskDetails(task)">
+                <article class="task-card" cdkDrag [cdkDragDisabled]="project()?.isDeleted"
+                         (click)="openTaskDetails(task)">
                   <div class="task-card__custom-placeholder" *cdkDragPlaceholder></div>
                   <div class="task-card__header"><h5 class="task-card__title">{{ task.title }}</h5></div>
                   <p class="task-card__description">{{ task.description || 'Fără descriere.' }}</p>
-                  <div class="task-card__footer"><span class="task-card__assignee">👤 {{ task.assignedName }}</span>
+                  <div class="task-card__footer">
+                    <span class="task-card__assignee">👤 {{ task.assignedName }}</span>
+                    <span class="task-priority badge priority-{{ task.priority | lowercase }}">
+                      {{ task.priority }}
+                    </span>
                   </div>
                 </article>
               }

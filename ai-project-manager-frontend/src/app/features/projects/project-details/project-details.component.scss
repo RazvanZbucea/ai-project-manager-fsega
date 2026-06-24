@@ -311,6 +311,21 @@ $shadow-drag: 0 8px 16px rgba(9, 30, 66, 0.25);
       padding: 0.2rem 0.5rem;
       border-radius: 12px;
     }
+
+    // --- ADAUGAT PENTRU BADGE-UL DE PRIORITATE ---
+    .task-priority {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+
+      &.priority-low { background-color: #d4edda; color: #155724; }
+      &.priority-medium { background-color: #fff3cd; color: #856404; }
+      &.priority-high { background-color: #f8d7da; color: #721c24; }
+      &.priority-critical { background-color: #dc3545; color: white; }
+    }
   }
 
   // --- PLACEHOLDER ---

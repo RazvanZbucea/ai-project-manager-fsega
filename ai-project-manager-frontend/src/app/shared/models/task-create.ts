@@ -1,4 +1,4 @@
-interface TaskCreate {
+export interface TaskCreate {
   title: string,
   description: string,
   status: string,

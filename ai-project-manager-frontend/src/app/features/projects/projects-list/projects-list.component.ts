@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProjectService } from '../../../core/services/project.service';
 import { RouterLink } from '@angular/router';
+import {Project} from '../../../shared/models/project';
+import {ProjectCreate} from '../../../shared/models/project-create';
 
 @Component({
   selector: 'app-projects-list',

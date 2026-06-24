@@ -1,6 +1,10 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {Task} from '../../shared/models/task';
+import {TaskCreate} from '../../shared/models/task-create';
+import {TaskUpdate} from '../../shared/models/task-update';
+import {GeneratedTask} from '../../shared/models/generated-task';
 
 @Injectable({
   providedIn: 'root',

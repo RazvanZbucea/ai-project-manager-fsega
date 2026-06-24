@@ -1,6 +1,7 @@
 import {Component, inject, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {DIALOG_DATA, DialogRef} from '@angular/cdk/dialog';
+import {GeneratedTask} from '../../../shared/models/generated-task';
 
 export interface AiPreviewDialogData {
   tasks: GeneratedTask[];

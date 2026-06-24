@@ -1,4 +1,4 @@
-interface ProjectUpdate {
+export interface ProjectUpdate {
   name: string,
   description: string
 }

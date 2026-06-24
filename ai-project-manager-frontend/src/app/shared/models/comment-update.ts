@@ -1,4 +1,4 @@
-interface CommentUpdate {
+export interface CommentUpdate {
   text: string
 
 }

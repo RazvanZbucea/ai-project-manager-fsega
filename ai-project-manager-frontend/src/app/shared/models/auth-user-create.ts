@@ -1,4 +1,4 @@
-interface AuthUserCreate {
+export interface AuthUserCreate {
   username: string,
   email: string
   password: string,

@@ -1,6 +1,10 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {Project} from '../../shared/models/project';
+import {ProjectCreate} from '../../shared/models/project-create';
+import {ProjectUpdate} from '../../shared/models/project-update';
+import {Task} from '../../shared/models/task';
 
 @Injectable({
   providedIn: 'root',

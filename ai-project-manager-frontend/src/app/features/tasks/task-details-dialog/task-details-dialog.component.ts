@@ -5,6 +5,9 @@ import {DIALOG_DATA, DialogRef} from '@angular/cdk/dialog';
 import {TaskService} from '../../../core/services/task.service';
 import {AuthService} from '../../../core/services/auth.service';
 import {CommentService} from '../../../core/services/comment.service';
+import { Task } from '../../../shared/models/task';
+import { Comment } from '../../../shared/models/comment';
+
 @Component({
   selector: 'app-task-details-dialog',
   standalone: true,
@@ -44,7 +47,7 @@ export class TaskDetailsDialogComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.isProjectDeleted.set(!!this.data.isProjectDeleted);
+    this.isProjectDeleted.set(this.data.isProjectDeleted);
 
     // 3. Poate edita DOAR dacă e manager ȘI proiectul este activ
     this.canEdit.set(this.data.isManager && !this.isProjectDeleted());

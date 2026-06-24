@@ -1,6 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
+import { Comment } from '../../shared/models/comment';
 
 @Injectable({providedIn: 'root'})
 export class CommentService {

@@ -2,6 +2,7 @@ import {Component, inject} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {ProjectService} from '../../../core/services/project.service';
 import {Router} from '@angular/router';
+import {ProjectCreate} from '../../../shared/models/project-create';
 
 @Component({
   selector: 'app-project-create',

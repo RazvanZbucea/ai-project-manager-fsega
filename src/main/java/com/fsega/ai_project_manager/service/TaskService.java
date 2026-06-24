@@ -51,6 +51,7 @@ public class TaskService {
         task.setTitle(taskDTO.title());
         task.setDescription(taskDTO.description());
         task.setStatus(Status.valueOf(taskDTO.status()));
+        task.setPriority(taskDTO.priority());
 
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("Project not found with id: " + projectId));
@@ -71,6 +72,7 @@ public class TaskService {
         task.setTitle(taskDTO.title());
         task.setDescription(taskDTO.description());
         task.setStatus(Status.valueOf(taskDTO.status()));
+        task.setPriority(taskDTO.priority());
 
         assignTaskToUser(task, taskDTO.assignedName());
 
@@ -106,6 +108,7 @@ public class TaskService {
             task.setStatus(Status.valueOf(taskDTO.status()));
             assignTaskToUser(task, taskDTO.assignedName());
             task.setProject(project);
+            task.setPriority(taskDTO.priority());
 
             taskDTOs.add(convertToDTO(taskRepository.save(task)));
         }

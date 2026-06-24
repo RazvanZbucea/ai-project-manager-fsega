@@ -1,3 +1,3 @@
-interface CommentCreate {
+export interface CommentCreate {
   text: string
 }
