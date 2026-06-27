@@ -9,6 +9,9 @@ import java.util.List;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
-    @Query("SELECT DISTINCT p FROM Project p LEFT JOIN p.users u WHERE p.createdBy = :username OR u.username = :username")
+    @Query("SELECT DISTINCT p FROM Project p LEFT JOIN p.users u " +
+            "WHERE p.createdBy = :username " +
+            "OR u.username = :username " +
+            "OR EXISTS (SELECT t FROM Task t WHERE t.project = p AND t.assignedTo.username = :username)")
     List<Project> findProjectsForUser(String username);
 }
