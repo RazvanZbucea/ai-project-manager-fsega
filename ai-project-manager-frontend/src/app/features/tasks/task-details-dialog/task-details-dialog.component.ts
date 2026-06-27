@@ -7,6 +7,8 @@ import {AuthService} from '../../../core/services/auth.service';
 import {CommentService} from '../../../core/services/comment.service';
 import { Task } from '../../../shared/models/task';
 import { Comment } from '../../../shared/models/comment';
+import { UserService } from '../../../core/services/user.service';
+import { User } from '../../../shared/models/user';
 
 @Component({
   selector: 'app-task-details-dialog',
@@ -30,6 +32,11 @@ export class TaskDetailsDialogComponent implements OnInit {
   private taskService = inject(TaskService);
   private commentService = inject(CommentService);
   private authService = inject(AuthService);
+  // Adaugă sub celelalte injecții (taskService, commentService etc.)
+  private userService = inject(UserService);
+
+  // Adaugă sub celelalte semnale (canEdit, isProjectDeleted etc.)
+  users = signal<User[]>([]);
 
   canEdit = signal<boolean>(false);
   isProjectDeleted = signal<boolean>(false); // 2. Signal nou pentru template-ul HTML
@@ -39,7 +46,8 @@ export class TaskDetailsDialogComponent implements OnInit {
     title: ['', [Validators.required]],
     description: [''],
     status: [''],
-    priority: ['MEDIUM']
+    priority: ['MEDIUM'],
+    assignedName: ['']
   });
 
   commentForm = this.fb.group({
@@ -60,6 +68,8 @@ export class TaskDetailsDialogComponent implements OnInit {
     }
 
     this.loadComments();
+
+    this.loadUsers();
   }
 
   loadComments() {
@@ -77,7 +87,7 @@ export class TaskDetailsDialogComponent implements OnInit {
         title: this.taskForm.value.title ?? '',
         description: this.taskForm.value.description ?? '',
         status: this.taskForm.value.status ?? this.data.task.status,
-        assignedName: this.data.task.assignedName ?? '',
+        assignedName: this.taskForm.value.assignedName ?? this.data.task.assignedName ?? '',
         priority: (this.taskForm.value.priority || this.data.task.priority || 'MEDIUM') as 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
       };
 
@@ -99,5 +109,11 @@ export class TaskDetailsDialogComponent implements OnInit {
         this.loadComments();
       });
     }
+  }
+  loadUsers() {
+    this.userService.getAllUsers().subscribe({
+      next: (res) => this.users.set(res),
+      error: (err) => console.error('Eroare la încărcarea utilizatorilor', err)
+    });
   }
 }
