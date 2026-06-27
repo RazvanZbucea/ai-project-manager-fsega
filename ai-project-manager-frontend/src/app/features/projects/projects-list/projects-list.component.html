@@ -1,9 +1,11 @@
 <div class="projects-page">
   <header class="projects-page__header">
     <h1 class="projects-page__title">Proiectele Mele</h1>
-    <button class="btn btn--primary" (click)="toggleForm()">
-      {{ isCreatingProject ? 'Anulează' : '+ Proiect Nou' }}
-    </button>
+    @if (authService.hasRole('ADMIN') || authService.hasRole('MANAGER')) {
+      <button class="btn btn--primary" (click)="toggleForm()">
+        {{ isCreatingProject ? 'Anulează' : '+ Proiect Nou' }}
+      </button>
+    }
   </header>
 
   @if (isCreatingProject) {
@@ -65,13 +67,15 @@
           <span class="project-card__id">#{{ project.id }}</span>
 
           <div class="project-card__actions">
-            <button
-              class="btn btn--sm btn--danger"
-              (click)="onDeleteProject(project)"
-              [disabled]="project.isDeleted"
-              [title]="project.isDeleted ? 'Proiectul este deja arhivat' : 'Arhivează proiectul'">
-              🗑️ Arhivează
-            </button>
+            @if (canArchiveProject(project)) {
+              <button
+                class="btn btn--sm btn--danger"
+                (click)="onDeleteProject(project)"
+                [disabled]="project.isDeleted"
+                [title]="project.isDeleted ? 'Proiectul este deja arhivat' : 'Arhivează proiectul'">
+                🗑️ Arhivează
+              </button>
+            }
 
             <button
               [routerLink]="['/projects', project.id]"
@@ -85,7 +89,9 @@
       <div class="projects-page__empty">
         <div class="projects-page__empty-icon">📁</div>
         <h3>Niciun proiect găsit</h3>
-        <p class="projects-page__empty-text">Apasă pe "+ Proiect Nou" pentru a începe.</p>
+        @if (authService.hasRole('ADMIN') || authService.hasRole('MANAGER')) {
+          <p class="projects-page__empty-text">Apasă pe "+ Proiect Nou" pentru a începe.</p>
+        }
       </div>
     }
   </main>

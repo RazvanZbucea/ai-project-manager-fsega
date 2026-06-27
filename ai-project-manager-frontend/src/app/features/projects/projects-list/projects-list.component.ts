@@ -5,6 +5,7 @@ import { ProjectService } from '../../../core/services/project.service';
 import { RouterLink } from '@angular/router';
 import {Project} from '../../../shared/models/project';
 import {ProjectCreate} from '../../../shared/models/project-create';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-projects-list',
@@ -16,6 +17,7 @@ import {ProjectCreate} from '../../../shared/models/project-create';
 export class ProjectsListComponent implements OnInit {
   private projectService = inject(ProjectService);
   private fb = inject(FormBuilder);
+  public authService = inject(AuthService);
 
   // 1. Folosim WritableSignal în loc de toSignal
   projects = signal<Project[]>([]);
@@ -85,5 +87,13 @@ export class ProjectsListComponent implements OnInit {
         }
       });
     }
+  }
+
+  canArchiveProject(project: Project): boolean {
+    const user = this.authService.currentUser();
+    if (!user) return false;
+
+    // Poate arhiva doar dacă e ADMIN sau dacă el este creatorul proiectului
+    return user.role === 'ADMIN' || project.createdBy === user.username;
   }
 }

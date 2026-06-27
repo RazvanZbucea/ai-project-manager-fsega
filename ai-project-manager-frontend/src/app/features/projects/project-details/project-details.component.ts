@@ -43,7 +43,7 @@ export class ProjectDetailsComponent implements OnInit {
   private taskService = inject(TaskService);
   private fb = inject(FormBuilder);
   private dialog = inject(Dialog);
-  private authService = inject(AuthService);
+  public authService = inject(AuthService);
 
   editForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
@@ -270,5 +270,15 @@ export class ProjectDetailsComponent implements OnInit {
         console.error('Eroare la generarea task-urilor via AI:', err);
       }
     });
+  }
+
+  canEditProject(): boolean {
+    const user = this.authService.currentUser();
+    const currentProject = this.project();
+
+    if (!user || !currentProject) return false;
+
+    // Poate edita dacă e ADMIN sau dacă el a creat proiectul (ex: este Managerul care îl deține)
+    return user.role === 'ADMIN' || currentProject.createdBy === user.username;
   }
 }

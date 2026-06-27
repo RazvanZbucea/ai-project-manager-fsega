@@ -5,12 +5,14 @@
       <h1 class="project-details-page__title">Detalii Proiect</h1>
     </div>
     <div class="project-details-page__actions">
-      <button class="btn btn--primary"
-              (click)="toggleEdit()"
-              [disabled]="project()?.isDeleted"
-              [title]="project()?.isDeleted ? 'Acest proiect este arhivat și nu mai poate fi modificat.' : ''">
-        {{ isEditing ? 'Anulează' : 'Editează Proiect' }}
-      </button>
+      @if (canEditProject()) {
+        <button class="btn btn--primary"
+                (click)="toggleEdit()"
+                [disabled]="project()?.isDeleted"
+                [title]="project()?.isDeleted ? 'Acest proiect este arhivat și nu mai poate fi modificat.' : ''">
+          {{ isEditing ? 'Anulează' : 'Editează Proiect' }}
+        </button>
+      }
     </div>
   </header>
 
@@ -68,21 +70,23 @@
     <section class="tasks-section">
       <div class="tasks-section__header">
         <h3>Kanban Board</h3>
-        <div style="display: flex; gap: 10px;">
-          <button class="btn btn--secondary btn--sm"
-                  (click)="generateTasksFromAI()"
-                  [disabled]="isGeneratingTasks() || project()?.isDeleted"
-                  [title]="project()?.isDeleted ? 'Proiectul este arhivat.' : ''">
-            {{ isGeneratingTasks() ? '✨ Se generează...' : '✨ Generează cu AI' }}
-          </button>
+        @if (canEditProject()) {
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn--secondary btn--sm"
+                    (click)="generateTasksFromAI()"
+                    [disabled]="isGeneratingTasks() || project()?.isDeleted"
+                    [title]="project()?.isDeleted ? 'Proiectul este arhivat.' : ''">
+              {{ isGeneratingTasks() ? '✨ Se generează...' : '✨ Generează cu AI' }}
+            </button>
 
-          <button class="btn btn--primary btn--sm"
-                  (click)="openCreateTaskDialog()"
-                  [disabled]="project()?.isDeleted"
-                  [title]="project()?.isDeleted ? 'Nu se pot adăuga task-uri la un proiect arhivat.' : ''">
-            + Adaugă Task
-          </button>
-        </div>
+            <button class="btn btn--primary btn--sm"
+                    (click)="openCreateTaskDialog()"
+                    [disabled]="project()?.isDeleted"
+                    [title]="project()?.isDeleted ? 'Nu se pot adăuga task-uri la un proiect arhivat.' : ''">
+              + Adaugă Task
+            </button>
+          </div>
+        }
       </div>
 
       @if (totalTasksCount() > 0) {
@@ -209,12 +213,14 @@
       } @else {
         <div class="tasks-section__empty">
           <p>Nu există task-uri asociate. Folosește AI pentru a genera automat task-uri din descrierea proiectului.</p>
-          <button class="btn btn--primary"
-                  style="margin-top: 1rem;"
-                  (click)="generateTasksFromAI()"
-                  [disabled]="isGeneratingTasks() || !project()?.description || project()?.isDeleted">
-            {{ isGeneratingTasks() ? '✨ Magia are loc...' : '✨ Generează cu AI' }}
-          </button>
+          @if (canEditProject()) {
+            <button class="btn btn--primary"
+                    style="margin-top: 1rem;"
+                    (click)="generateTasksFromAI()"
+                    [disabled]="isGeneratingTasks() || !project()?.description || project()?.isDeleted">
+              {{ isGeneratingTasks() ? '✨ Magia are loc...' : '✨ Generează cu AI' }}
+            </button>
+          }
 
           @if (!project()?.description && !project()?.isDeleted) {
             <p style="color: var(--danger-color); font-size: 0.85rem; margin-top: 0.5rem;">
