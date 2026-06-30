@@ -42,7 +42,8 @@ export class AiTasksPreviewDialogComponent {
       .map(item => ({
         title: item.task.title,
         description: item.task.description,
-        status: item.task.suggestedStatus || 'TO_DO'
+        status: item.task.suggestedStatus || 'TO_DO',
+        priority: item.task.priority
       }));
 
     // Închidem dialogul și trimitem datele curate înapoi
